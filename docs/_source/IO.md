@@ -1,6 +1,6 @@
 IO常用的类如下：
 
-<img src="../_img/IO_1.png" width=400>
+![IO常用方法](../_img/IO_1.png)
 
 ## 参考资料
 
