@@ -2,10 +2,14 @@
 
 <!-- 左边导航栏 -->
 
+- 目录
+
+  - [目录](_source/contents.md)
+
 - Java基础
 
-  - [IO](_source/IO.md)
-  - [网络编程](_source/网络编程.md)
+  - [IO](_source/JavaBasics/IO.md)
+  - [网络编程](_source/JavaBasics/网络编程.md)
 
 - B/S
 

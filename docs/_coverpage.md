@@ -13,7 +13,7 @@
 
 <!-- Link -->
 [GitHub](https://github.com/floatLig/JavaLearning)
-[Get Started](#readme)
+[Get Started](/_source/contents)
 
 <!-- background image -->
 <!-- ![](_media/bg.png) -->
