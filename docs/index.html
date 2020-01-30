@@ -1,96 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  
-  <!-- themes -->
-  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
-  <!-- <link rel="stylesheet" href="//unpkg.com/docsify/themes/dark.css"> -->
-  
-  <!-- A docsify plugin that copies Markdown code block to your clipboard. -->
-  <!-- But it is not work? -->
-  <script src="https://unpkg.com/docsify-copy-code@2"></script>
-  
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <!-- themes -->
+    <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+    <!-- <link rel="stylesheet" href="//unpkg.com/docsify/themes/dark.css"> -->
+
+    <!-- A docsify plugin that copies Markdown code block to your clipboard. -->
+    <!-- But it is not work? -->
+    <script src="https://unpkg.com/docsify-copy-code@2"></script>
+
 </head>
+
 <body>
 
     <!-- 左上角 中英文切换 -->
     <nav>
-      <a href="#/">EN</a>
-      <a href="#/zh-cn/">中文</a>
+        <a href="#/">EN</a>
+        <a href="#/zh-cn/">中文</a>
     </nav>
 
-  <!-- 加载时显示的内容 -->
-  <div id="app">loading···😊</div>
-  
-  <script>
-    window.$docsify = {
-      //👆封面
-      coverpage: true,
-      // multiple covers
-      // coverpage: ['/', '/zh-cn/'],
+    <!-- 加载时显示的内容 -->
+    <div id="app">loading···😊</div>
 
-      //打开默认的主页
-      // homepage: 'guide.md',
+    <script>
+        window.$docsify = {
+            //👆封面
+            coverpage: true,
+            // multiple covers
+            // coverpage: ['/', '/zh-cn/'],
 
-      //主色调
-      // themeColor: '#3F51B5'
+            //打开默认的主页
+            // homepage: 'guide.md',
 
-      //标题
-      name: 'Java Learning',
-      // nameLink: '/',
+            //主色调
+            // themeColor: '#3F51B5'
 
-      //👈左边导航栏
-      loadSidebar: true,
-      autoHeader: true,
-      // maxLevel: 3,
-      subMaxLevel: 3,
+            //标题
+            name: 'Java Learning',
+            // nameLink: '/',
 
-      //👉右上面导航栏
-      loadNavbar: true,
-      mergeNavbar: true,
+            //👈左边导航栏
+            loadSidebar: true,
+            autoHeader: true,
+            // maxLevel: 3,
+            subMaxLevel: 5,
 
-      //👉绿色小猫跳转到GitHub
-      repo: 'https://github.com/floatLig/JavaLearning',
+            //👉右上面导航栏
+            loadNavbar: true,
+            mergeNavbar: true,
 
-      //不知道是什么东西~
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
-      },
+            //👉绿色小猫跳转到GitHub
+            repo: 'https://github.com/floatLig/JavaLearning',
 
-      //不知道有什么用
-      auto2top: true,
+            //不知道是什么东西~
+            alias: {
+                '/.*/_sidebar.md': '/_sidebar.md'
+            },
 
-      //👇用于跳转，但是好像没用？
-      pagination: {
-      previousText: '上一章节',
-      nextText: '下一章节',
-      crossChapter: true
-      },
+            //不知道有什么用
+            auto2top: true,
 
-      // 用于复制粘贴，但是好像没用?  docsify-copy-code (defaults)
-      copyCode: {
-      buttonText : 'Copy to clipboard',
-      errorText : 'Error',
-      successText: 'Copied'
-      }
-    }
-  </script>
-  <!-- docsify -->
-  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
-  <!-- java高亮 -->
-  <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
-  <!-- plugins -->
-  <!-- 试一下【:100:】  -->
-  <script src="//unpkg.com/docsify/lib/plugins/emoji.min.js"></script>
-  <!-- 调整图片大小【':size=50x100'】 -->
-  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
-  <!-- 👇用于跳转下一章，但是好像没用？ -->
-  <script src="../dist/docsify-pagination.js"></script>
+            //👇用于跳转，但是好像没用？
+            pagination: {
+                previousText: '上一章节',
+                nextText: '下一章节',
+                crossChapter: true
+            },
+
+            // 用于复制粘贴，但是好像没用?  docsify-copy-code (defaults)
+            copyCode: {
+                buttonText: 'Copy to clipboard',
+                errorText: 'Error',
+                successText: 'Copied'
+            }
+        }
+    </script>
+    <!-- docsify -->
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <!-- java高亮 -->
+    <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
+    <!-- javaScript高亮 -->
+    <script src="//unpkg.com/prismjs/components/prism-javascript.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-javascript.min.js"></script>
+    <!-- sql高亮 -->
+    <script src="//unpkg.com/prismjs/components/prism-sql.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-sql.min.js"></script>
+    <!-- plugins -->
+    <!-- 试一下【:100:】  -->
+    <script src="//unpkg.com/docsify/lib/plugins/emoji.min.js"></script>
+    <!-- 调整图片大小【':size=50x100'】 -->
+    <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+    <!-- 👇用于跳转下一章，但是好像没用？ -->
+    <script src="../dist/docsify-pagination.js"></script>
 </body>
+
 </html>

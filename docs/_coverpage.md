@@ -12,8 +12,8 @@
 - Using docsify
 
 <!-- Link -->
-[GitHub](https://github.com/floatLig/DoLeetcode)
-[Get Started](#docsify)
+[GitHub](https://github.com/floatLig/JavaLearning)
+[Get Started](#readme)
 
 <!-- background image -->
 <!-- ![](_media/bg.png) -->
