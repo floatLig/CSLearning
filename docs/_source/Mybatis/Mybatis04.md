@@ -177,6 +177,8 @@ public interface IAccountDao {
 
 这里解释一下一对一，我们写的SQL语句其实只有“select * from account”，但是，每一条记录，都会`调用【像函数调用】`另一条SQL语句【findUserByUserId】的语句，并且`参数是每一条SQL语句的uid`。这样，我们看似只写了一条简单的SQL语句，但是，我们却执行了两条SQL语句，并且，`相应的结果也会赋值到Account.user这个属性里面`。
 
+✨`这样子使用@One、@Many能够发挥出延迟加载的优势。`
+
 ### 1.4 多表查询--一对多
 
 ![注解一对多1.jpg](../../_img/注解一对多1.jpg)
@@ -189,7 +191,9 @@ public interface IAccountDao {
 
 ![多对多.jpg](../../_img/多对多.jpg)
 
-多对多有一个重要的特点是，`会有一个中间表(如user_role表）把两个表（user表和role表）联系起来。要使用@One和@Many其实不方便，我们可以这样子写。`peizh
+多对多有一个重要的特点是，`会有一个中间表(如user_role表）把两个表（user表和role表）联系起来。要使用@One和@Many其实不方便，我们可以这样子写。`
+
+✨`这样子写就没有延迟加载了。`
 
 ### 1.6 缓存
 

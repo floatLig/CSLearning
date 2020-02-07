@@ -500,7 +500,7 @@ properties的目的是：`将数据库连接的配置信息和SqlMapConfig.xml�
 jdbc.driver=com.mysql.jdbc.Driver
 jdbc.url=jdbc:mysql://localhost:3306/myproject_textdb?characterEncoding=utf8
 jdbc.username=root
-jdbc.password=uber
+jdbc.password=root
 ```
 
 **再介绍一下typeAliases:**
@@ -520,13 +520,12 @@ properties针对的是全局配置文件【SQL连接配置】，而typeAliases�
 </typeAliases>
 ```
 
----
+### 3. 源码图解
 
-注意:用的是符号${ xxx }
+拖到桌面再详细看
 
-注意：映射文件的sql
-这个 sql 语句中使用#{}字符，#{}代表占位符，我们可以理解是原来 jdbc 部分所
-学的?，它们都是代表占位符， 具体的值是由User 类的 username属性来决定的。
-parameterType 属性：代表参数的类型，因为我们要传入的是一个类的对象，所以类型就写类的全名称。
-注意：
-这 种 方 式 要 求 <mapper namespace=” 映 射 接 口 所 在 的 包 名 ”>, 同 时 还 要 求<select>,<insert>,<delete>,<update>这些标签中的 id属性一定与代理接口中的方法名相同。
+![非常重要的一张图-分析代理dao的执行过程.png](../../_img/非常重要的一张图-分析代理dao的执行过程.png ':size=100x200')
+
+![非常重要的一张图-分析代理dao的执行过程.png](../../_img/非常重要的一张图-分析编写dao实现类Mybatis的执行过程(1).png ':size=600x100')
+
+![非常重要的一张图-分析代理dao的执行过程.png](../../_img/非常重要的一张图.png ':size=400x100')

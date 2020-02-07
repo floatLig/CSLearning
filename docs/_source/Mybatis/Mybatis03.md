@@ -40,11 +40,29 @@
 
 ![dataSourceXML.jpg](../../_img/dataSourceXML.jpg)
 
+MyBatis在初始化时，根据`<dataSource>`的type属性来创建相应类型的的数据源DataSource，即：
+
+1. type=”POOLED”：MyBatis会创建PooledDataSource实例
+2. type=”UNPOOLED” ： MyBatis会创建UnpooledDataSource实例
+3. type=”JNDI”：MyBatis会从`JNDI服务上`查找DataSource实例，然后返回使用
+
+MyBatis是通过`工厂模式`来创建数据源DataSource对象的，MyBatis定义了抽象的工厂接口:org.apache.ibatis.datasource.DataSourceFactory,通过其`getDataSource()`方法返回数据源DataSource
+
 在这三种数据源中，我们一般采用的是POOLED数据源（很多时候我们所说的数据源就是为了`更好的管理数据库连接`，也就是我们所说的连接池技术）。
 
 我们在实际开发中都会使用连接池。因为它可以减少我们获取连接所消耗的时间。
 
-### 1.1 比对--UnpooledDataSource，PooledDataSource
+### 1.1 过程分析
+
+当我们需要创建SqlSession对象`并需要执行SQL语句时`，这时候MyBatis`才会去调用dataSource对象来创建java.sql.Connection对象`。也就是说，java.sql.Connection对象的创建一直延迟到执行SQL语句的时候。
+
+通过源码可以发现，真正连接打开的时间点，只是在我们执行SQL语句时，才会进行。其实这样做我们也可以进一步发现，`数据库连接是我们最为宝贵的资源，只有在要用到的时候，才去获取并打开连接，当我们用完了就再立即将数据库连接归还到连接池中。`
+
+连接池调用的过程：
+
+![连接池.jpg](../../_img/连接池.jpg)
+
+### 1.2 比对--UnpooledDataSource，PooledDataSource
 
 **日志比对：**
 
@@ -69,7 +87,7 @@ UNPOOLED连接池：
     select * from user
     <where>
         <if test="userIds != null and userIds.size() > 0">
-            <foreach collection="userIds" open="and id in (" close=")" item="userId" separator=",">
+            <foreach collection="userIds" item="userId"  open="and id in (" separator="," close=")">
                 #{userId}
             </foreach>
         </if>
@@ -420,7 +438,10 @@ User{userId=43, userName='小二王', userAddress='北京金燕龙', userSex='�
 
 **什么是延迟加载：**
 
-在真正使用数据时才发起查询，不用的时候不查询。按需加载（懒加载）
+就是在需要用到数据时才进行加载，不需要用到数据时就不加载数据。延迟加载也称懒加载.
+
+- 好处：先从单表查询，需要时再从关联表去关联查询，大大提高数据库性能，因为查询单表要比关联查询多张表速度要快。
+- 坏处： 因为只有当需要用到数据时，才会进行数据库查询，这样在大批量数据查询时，因为查询工作也要消耗时间，所以可能造成用户等待时间变长，造成用户体验下降。
 
 **什么是立即加载：**
 
@@ -465,6 +486,8 @@ User{userId=43, userName='小二王', userAddress='北京金燕龙', userSex='�
 
 1. 经常改变的数据
 2. 数据的正确与否对最终结果影响很大的，比如商品的库存，银行的汇率，股市的牌价等
+
+![mybatis缓存.jpg](../../_img/mybatis缓存.jpg)
 
 ### 5.1 一级缓存
 
@@ -530,11 +553,7 @@ org.apache.ibatis.binding.MapperProxy@c81cdd1
 
 二：让当前的映射文件支持二级缓存（在IUserDao.xml中配置）
 
-```xml
-<settings>
-    <setting name="cacheEnabled" value="true">
-</settings>
-```
+![当前文件二级缓存](../../_img/当前文件二级缓存.png)
 
 三：让当前的操作支持二级缓存（在select标签中配置）
 

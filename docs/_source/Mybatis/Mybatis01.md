@@ -1,3 +1,71 @@
+## 😊特别篇--mybatis细节
+
+![mybatis知识地图.png](../../_img/mybatis知识地图.png)
+
+[mybatis官方文档](https://mybatis.org/mybatis-3/zh/index.html)的细节：
+
+- 构建：
+  - SqlSessionFactoryBuilder 则可以从 XML 配置文件或一个预先定制的 Configuration 的实例构建出 SqlSessionFactory 的实例。
+- 注解和xml：
+  - 不过，由于 Java 注解的一些限制以及某些 MyBatis 映射的复杂性，要使用大多数高级映射（比如：嵌套联合映射），仍然需要使用 XML 配置。
+  - 选择何种方式来配置映射，以及认为映射语句定义的一致性是否重要，这些完全取决于你和你的团队。 换句话说，永远不要拘泥于一种方式，你可以很轻松的在基于注解和 XML 的语句映射方式间自由移植和切换。
+- 作用域（scope）：
+  - SqlSessionFactoryBuilder这个类可以被实例化、使用和丢弃，一旦创建了 SqlSessionFactory，就不再需要它了。 因此 SqlSessionFactoryBuilder 实例的最佳作用域是方法作用域（也就是局部方法变量）。 你可以重用 SqlSessionFactoryBuilder 来创建多个 SqlSessionFactory 实例，但是最好还是不要让其一直存在，以保证所有的 XML 解析资源可以被释放给更重要的事情。
+  - SqlSessionFactorySqlSessionFactory 一旦被创建就应该在应用的运行期间一直存在，没有任何理由丢弃它或重新创建另一个实例。 使用 SqlSessionFactory 的最佳实践是在应用运行期间不要重复创建多次，多次重建 SqlSessionFactory 被视为一种代码“坏味道（bad smell）”。因此 SqlSessionFactory 的最佳作用域是应用作用域。 有很多方法可以做到，最简单的就是使用单例模式或者静态单例模式。
+  - SqlSession：每个线程都应该有它自己的 SqlSession 实例。SqlSession 的实例不是线程安全的，因此是不能被共享的，所以它的最佳的作用域是请求或方法作用域。 绝对不能将 SqlSession 实例的引用放在一个类的静态域，甚至一个类的实例变量也不行。
+- mybatis配置文件
+  - 顶层结构：
+  - ![xml顶层结构.jpg](../../_img/xml顶层结构.jpg)
+  - properties的优先级：通过方法参数传递的属性具有最高优先级，resource/url 属性中指定的配置文件次之，最低优先级的是 properties 属性中指定的属性。
+
+### 字符串替换
+
+默认情况下,使用 #{} 格式的语法会导致 MyBatis 创建 PreparedStatement 参数`占位符`并安全地设置参数（就像使用 `?` 一样）。 这样做更安全，更迅速，通常也是首选做法，不过有时你就是想直接在 SQL 语句中`插入一个不转义的字符串`。 比如，像 ORDER BY，你可以这样来使用：
+
+```sql
+ORDER BY ${columnName}
+```
+
+这里 MyBatis 不会修改或转义字符串。
+
+当 SQL 语句中的元数据（如表名或列名）是动态生成的时候，字符串替换将会非常有用。 举个例子，如果你想通过任何一列从表中 select 数据时，不需要像下面这样写：
+
+```java
+@Select("select * from user where id = #{id}")
+User findById(@Param("id") long id);
+
+@Select("select * from user where name = #{name}")
+User findByName(@Param("name") String name);
+
+@Select("select * from user where email = #{email}")
+User findByEmail(@Param("email") String email);
+
+// and more "findByXxx" method
+```
+
+可以只写这样一个方法：
+
+```java
+@Select("select * from user where ${column} = #{value}")
+User findByColumn(@Param("column") String column, @Param("value") String value);
+```
+
+其中 `${column} 会被直接替换，而 #{value} 会被使用 ? 预处理`。 因此你就可以像下面这样来达到上述功能：
+
+```java
+User userOfId1 = userMapper.findByColumn("id", 1L);
+User userOfNameKid = userMapper.findByColumn("name", "kid");
+User userOfEmail = userMapper.findByColumn("email", "noone@nowhere.com");
+```
+
+这个想法也同样适用于用来替换表名的情况。
+
+提示: `用这种方式接受用户的输入，并将其用于语句中的参数是不安全的，会导致潜在的 SQL 注入攻击，因此要么不允许用户输入这些字段，要么自行转义并检验。`
+
+![mybatis.png](../../_img/mybatis字符串.png)
+
+![mybatis.png](../../_img/mybatis字符串2.png)
+
 ## 1. mybatis介绍
 
 ### 1.1 mybatis框架
@@ -12,8 +80,55 @@
 
 **mybaits解决的问题--jdbc问题分析：**
 
+我们来回顾一下使用jdbc的原始方法（未经封装）是怎么写的
+
+```java
+public static void main(String[] args) {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+    try { //加载数据库驱动
+        Class.forName("com.mysql.jdbc.Driver"); //通过驱动管理类获取数据库链接
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mybatis?characterEncoding=utf-8",
+                "root", "root"); //定义sql语句 ?表示占位符
+        String sql = "select * from user where username = ?";//获取预处理
+        statement preparedStatement = connection.prepareStatement(sql); //设置参数，第一个参数为sql语句中参数的序号（从1开始），第二个参数为设置的参数值
+        preparedStatement.setString(1, "王五"); //向数据库发出sql执行查询，查询出结果集
+        resultSet = preparedStatement.executeQuery(); //遍历查询结果集
+        while (resultSet.next()) {
+            System.out.println(resultSet.getString("id") + " "
+                    + resultSet.getString("username"));
+        }
+    } catch (
+            Exception e) {
+        e.printStackTrace();
+    } finally { //释放资源
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (preparedStatement != null) {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) { // TODO Auto-generated catch block e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
 1. 数据库链接创建、释放频繁造成系统资源浪费从而影响系统性能，如果使用`数据库链接池`可解决此问题。
-2. SQL语句在代码中硬编码，造成代码不易维护，实际应用SQL变化的可能较大，SQL变动需要改变Java代码。
+2. SQL语句在代码中[硬编码](https://baike.baidu.com/item/%E7%A1%AC%E7%BC%96%E7%A0%81/8070173)（也叫写死），造成代码不易维护，实际应用SQL变化的可能较大，SQL变动需要改变Java代码。
 3. 使用prepareedStatement向占有位符号传参数存在硬编码，因为SQL语句的where条件不一定，可能多也可能少，修改SQL还需要修改代码，系统不易维护。
 4. 对结果集解析存在硬编码（查询列名），SQL变化导致解析代码变化，系统不易维护，如果能将数据库记录封装成pojo对象解析比较方便。
 
@@ -25,7 +140,9 @@
 
 mybais是一个持久层框架，用Java编写的。它封装了jdbc操作的很多细节，使开发者只需关注sql语句本身，而无需关注注册驱动，创建连接等繁杂过程。
 
-mybatis通过xml或注解的方式将要执行的各种statement配置起来，并通过Java对象和statement中SQL的动态参数进行映射生成最终执行的SQL语句，最后由mybatis框架执行SQL并将结果映射为Java对象并返回。
+😊`mybatis关注Dao层、数据库的SQL、Domain层`
+
+mybatis通过xml或注解的方式将要执行的各种statement配置起来，并通过`Java对象`和statement中`SQL`的动态参数进行映射生成最终执行的SQL语句，最后由mybatis框架执行SQL并将结果映射为`Java对象`并返回。
 
 采用ORM思想解决了实体和数据库映射的问题，对jdbc进行了封装，屏蔽了jdbc api底层访问细节，使我们不用与jdbc api打交道，就可以完成对数据库的持久化操作。
 
@@ -38,6 +155,18 @@ ORM：Object Relational Mapping `对象关系映射`。简单的说：就是`把
 **业务层：** 处理业务需求
 
 **持久层：** 和数据库交互
+
+![三层模型.jpg](../../_img/三层模型.jpg)
+
+通过分层更好的实现了各个部分的职责，`在每一层将再细化出不同的框架，分别解决各层关注的问题`。
+
+**分层下常见的框架有：**
+
+持久层的框架：mybatis框架。，还有一个封装程度更高的框架就是`Hibernate`，但这个框架因为各种原因目前在国内的流行程度下降太多，现在公司开发也越来越少使用。目前使用`Spring Data来实现数据持久化`也是一种趋势。
+
+解决WEB层问题的MVC框架：如springMVC，strust2框架
+
+解决技术整合问题的框架：Spring框架
 
 ## 2. 编写mybatis的入门程序
 
@@ -164,7 +293,7 @@ public interface IUserDao {
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/myproject_textdb?characterEncoding=utf8"/>
                 <property name="username" value="root"/>
-                <property name="password" value="uber"/>
+                <property name="password" value="root"/>
             </dataSource>
         </environment>
     </environments>
@@ -268,7 +397,7 @@ public interface IUserDao {
 
 还记得SqlMapConfig.xml中的代码由jdbc配置文件和指向SQL的mapper组成吗？
 
-没错，所有的SQL的都必须写在mapper中。所以，SQL是由注解实现还是由xml实现，也应该在mapper中指明。
+没错，所有的SQL的都必须写在mapper中【`为了解析`】。所以，SQL是由注解实现还是由xml实现，也应该在mapper中指明。
 
 修改SqlMapConfig.xml的Mapper
 
@@ -352,13 +481,17 @@ public class MyBatisTest {
 1. interface SqlSessionFactory
 1. interface SqlSession
 
+且其原理如图：
+
+![自定义Mybatis分析.png](../../_img/自定义Mybatis分析.png)
+
 现在，删除pom文件中定义的mybatis的依赖信息。这时会报很多错误，我们自己书写类来改正这些错误。
 
 完成后目录如图所示：
 
 ![自定义mybatis.jpg](../../_img/自定义mybatis.jpg)
 
-我们看到错误主要集中在：测试main函数，因为缺少了这些类，所哟手动创建这些类。
+我们看到错误主要集中在：测试main函数，因为缺少了这些类，所以手动创建这些类。
 
 创建Resource类：
 
@@ -434,7 +567,7 @@ public interface SqlSession {
 
 因需要自己读取xml配置的文件，不需要约束信息，删除配置文件中的约束信息.
 
-创建XMLConfigBuilder.java,同时引入dom4j的依赖的jar包
+创建XMLConfigBuilder.java,同时引入dom4j的依赖的jar包【dom4j是解析xml的技术】
 
 ```java
 /**
@@ -1003,6 +1136,28 @@ User{id=45, username='传智播客', birthday=2018-03-04 12:04:06.0, sex='男', 
 User{id=46, username='老王', birthday=2018-03-07 17:37:26.0, sex='男', address='北京'}
 User{id=48, username='小马宝莉', birthday=2018-03-08 11:44:00.0, sex='女', address='北京修正'}
 ```
+
+### 3.3 设计模式
+
+这里对我们使用的设计模式做一下诠释：
+
+**工厂模式（SqlSessionFactory）：**
+
+工厂模式是我们最常用的`实例化对象模式`了，是用工厂方法`代替new操作`的一种模式。著名的Jive论坛 ,就大量使用了工厂模式，工厂模式在Java程序系统可以说是随处可见。因为工厂模式就相当于创建实例对象的new，我们经常要根据类Class生成实例对象，如A a=new A() 工厂模式也是用来创建实例对象的，`所以以后new时就要多个心眼，是否可以考虑使用工厂模式`，虽然这样做，可能多做一些工作，但会给你系统带来更大的可扩展性和尽量少的修改量。
+
+![工厂模式1.jpg](../../_img/工厂模式1.jpg)
+
+**代理模式(MapperProxyFactory):**
+
+代理模式`分为静态和动态代理`。MapperProxyFactory使用的是动态代理。
+
+![代理模式1.jpg](../../_img/代理模式1.jpg)
+
+**构建者模式(SqlSessionFactoryBuilder):**
+
+其核心思想是将一个“`复杂对象的构建算法`”与它的“`部件及组装方式`”分离，使得构件算法和组装方式可以独立应对变化；复用同样的构建算法可以创建不同的表示，`不同的构建过程可以复用相同的部件组装方式`。
+
+![构建者模式1.jpg](../../_img/构建者模式1.jpg)
 
 ## 4. 总结
 
