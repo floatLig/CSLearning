@@ -1,7 +1,7 @@
 <!-- _coverpage.md -->
 
 😃
-<!-- <img width="220px" src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/other/LogoMakr_0zpEzN.png"> -->
+<!-- <img width="220px" src="https://github.com/floatLig/JavaLearning/blob/master/docs/_img/logo.jpg"> -->
 
 ## Java Learning
 
