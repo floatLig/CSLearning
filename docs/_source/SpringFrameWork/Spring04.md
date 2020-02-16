@@ -3,9 +3,123 @@
 
 但是很多时候有可能因为一些原因，出现异常等，使得一些语句提交到数据库了，但是一些语句没有提交到数据库。这个时候就要求我们进行`事务控制`。
 
-我们可以用前面讲的`AOP进行事务控制`。
+我们可以用前面讲的`AOP进行事务控制`。而且，需要注意，`事务控制应该位于业务层(Service层)`
 
-## 1. AOC实现转账事务控制
+## 1. Spring事务控制API的介绍
+
+### 1.1 PlatformTransactionManager
+
+PlatformTransactionManager是一个`接口`，此接口是spring的`事务管理器`，它里面提供了我们常用的操作事务的方法：
+
+```java
+获取事务状态信息
+TransactionStatus getTransaction(TransactionDefinition definition)
+
+提交事务
+void commit(TransactionStatus status)
+
+回滚事务
+void rollback(TransactionStatus status)
+```
+
+因为platformTransactionManagerment是一个接口，真正管理事务的对象为：
+
+- 使用Spring JDBC或iBatis进行持久化数据：org.springframework.jdbc.datasource.DataSourceTransactionManager  
+- 使用Hibernate版本进行持久化数据：org.springframework.orm.hibernate5.HibernateTransactionManager
+
+![DataSourceTransactionManagermentUML图.jpg](../../_img/DataSourceTransactionManagermentUML图.jpg)
+
+### 1.2 TransactionDefinition
+
+在PlatformTransactionManager接口中有看到TransactionDefinition类，现在来解释一下。
+
+TransactionDefinition是`事务的定义信息对象`，里面有如下方法：
+
+```java
+获取事务对象名称
+String getName()
+
+获取事务隔离级
+int getIsolationLevel()
+
+获取事务传播行为
+int getPropagationBehavior()
+
+获取事务超时时间
+int getTimeout()
+
+获取事务是否只读,查询时设置为true
+boolean isReadOnly()
+```
+
+一个事查询时，isReadOnly()`设置为true`。当isReadOnly()设置为true后，`其他的事物不能对数据库进行写操作`，从而保证了读取的事务不会出错。
+
+**事务的隔离级别：**
+
+```java
+事务隔离级反应事务提交“并发访问”时的处理态度
+
+默认级别，归属下列的某一种，不同数据库有不同的默认值
+ISOLATION_DEFAULT
+
+可以读取未提交数据
+ISOLATION_READ_UNCOMMITTED
+
+只能读取已提交数据，解决脏读问题（Oracle默认级别）
+ISOLATION_READ_COMMITTED
+
+是否读取其他事务提交修改后的数据，解决不可重复读问题（MySQL默认级别）
+ISOLATION_REPEATABLE_READ
+
+是否读取其他事务提交添加后的数据，解决幻影读问题
+ISOLATION_SERIALIZABLE
+```
+
+**事务的传播行为：**
+
+- REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，就加入到这个事务中。一般选择，默认值。
+- SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行（没有事务）
+- MANDATORY：使用当前的事务，如果当前没有事务，就抛出异常
+- REQUERS_NEW：新建事务，如果当前在事务中，把当前事务挂起
+- NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起
+- NEVER：以非事务方式运行，如果当前存在事务，抛出异常
+- NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行REQUIRED类似的操作
+
+**超时时间：**
+
+默认值是-1，没有超时限制。如果有，以秒为单位进行设置
+
+**是否是只读事务：**
+
+查询时设置为只读
+
+### 1.3 TransactionStatus
+
+在PlatformTransactionManager接口中有看到TransactionStatus类，现在来解释一下。
+
+TransactionStatus接口描述了某个时间点上事务对象的状态信息，包含有6个具体操作：
+
+```java
+刷新事务
+void flush()
+
+获取是否存在存储点
+boolean hasSavepoint()
+
+获取事务是否完成
+boolean isCompleted()
+
+获取事务是否成为新的事物
+boolean isNewTransaction()
+
+获取事物是否回滚
+boolean isRollbackOnly()
+
+设置事物回滚
+void setRollbackOnly()
+```
+
+## 2. AOC实现转账事务控制
 
 先来看代码【`AOP进行事务控制---转账`】：
 
@@ -287,9 +401,11 @@ public class testAccount {
 }
 ```
 
-## 2. Spring的事务控制--xml
+## 3. Spring的事务控制--xml
 
 当然，spring也能实现事务控制，来代替我们上面写的“ConnectionUtils”，“TransactionManager”。
+
+spring的事务控制都是基于AOP的，它既可以使用编程的方式实现，也可以使用配置的方式实现。学习的重点是`使用配置的方式实现`。
 
 bean.xml
 
@@ -389,7 +505,7 @@ public class testAccount {
 }
 ```
 
-## 3. Spring的事务控制--注解
+## 4. Spring的事务控制--注解
 
 `那么，AccountImpl就不能用extends了【因为不能修改源码】，改成私有属性`
 
@@ -467,7 +583,7 @@ public class AccountServiceImpl implements AccountService {
 </beans>
 ```
 
-## 4. 全注解方式实现转账
+## 5. 全注解方式实现转账
 
 原来类的配置不用改变，现在考虑的是如何将xml的内容变成Java类
 
@@ -561,6 +677,7 @@ public class testAccount {
 
 ---
 
+```text
 配置事务的属性
             isolation:用于指定事务的隔离级别。默认值为DEFAULT，表示使用数据库的默认隔离级别
             propagation:用于指定事务的传播行为。默认值为REQUIRED,表示一定会有事务，增删改的选择。查询方法为SUPPORTS
@@ -569,3 +686,10 @@ public class testAccount {
             rollback-for：用于指定一个异常，当产生该异常时，事务回滚，产生其他异常时，事务不回滚。不设置的时候表示任何异常都回滚
             no-rollback-for：用于指定一个异常，当产生该异常时，事务不回滚，产生其他异常时事务回滚。不设置的时候表示任何异常都回滚
 
+```
+
+## 5. 其他spring的知识点
+
+**@NonNull注解和@Nullable注解的使用：**
+
+ 用 @Nullable 和 @NotNull 注解来显示表明可为空的参数和以及返回值。这样就够在编译的时候处理空值而不是在运行时抛出 NullPointerExceptions。

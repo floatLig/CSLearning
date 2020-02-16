@@ -1,5 +1,7 @@
 ## 1. 动态代理
 
+关于动态代理的详细介绍，可以参考另一篇博客:[Java-代理机制](https://floatlig.github.io/2020/02/06/Java-%E4%BB%A3%E7%90%86%E6%9C%BA%E5%88%B6/)
+
 动态代理代码：
 
 Producer接口：
@@ -26,7 +28,7 @@ Main类
 ```java
 public class Main {
     public static void main(String[] args) {
-        final ProducerImpl producer = new ProducerImpl();
+        final Producer producer = new ProducerImpl();
 
         Producer proxyProducer= (Producer) Proxy.newProxyInstance(producer.getClass().getClassLoader(), producer.getClass().getInterfaces(),
                 new InvocationHandler() {
@@ -150,6 +152,8 @@ public class Main {
 AOP全称是`Aspect Oriented Programming`，即：`面向切面编程【切面+切入点】`。
 
 `把我们程序重复的代码抽取出去，在需要执行的时候，使用动态代理的技术，在不修改源码的基础上，对我们已有方法进行增强。`
+
+![aop知识地图.png](../../_img/aop知识地图.png)
 
 AoP的作用及好处：
 

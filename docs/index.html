@@ -14,11 +14,11 @@
     <!-- <link rel="stylesheet" href="//unpkg.com/docsify/themes/dark.css"> -->
 
     <!-- gittalk 好像没用？-->
-    <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css">
+    <!-- <link rel="stylesheet" href="//unpkg.com/gitalk/dist/gitalk.css"> -->
 
-    <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
-    <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
+    <!-- <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script> -->
+    <!-- <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script> -->
+    <!-- <script>
         const gitalk = new Gitalk({
             clientID: 'Github Application Client ID',
             clientSecret: 'Github Application Client Secret',
@@ -28,25 +28,50 @@
             // facebook-like distraction free mode
             distractionFreeMode: false
         })
-    </script>
+    </script> -->
 
+    <!-- 将自定义样式放在 Github 上会导致加载速度变得非常慢，所以采取直接内嵌的方式 -->
+    <style type="text/css">
+        /* 设置行距 */
+        
+        p,
+        ol,
+        ul {
+            line-height: 30px !important;
+        }
+        
+        .sidebar,
+        .search input {
+            background-color: rgba(243, 242, 238, 1) !important;
+        }
+        
+        .sidebar ul li a {
+            letter-spacing: 1.3px !important;
+        }
+    </style>
 </head>
 
 <body>
 
     <!-- 左上角 中英文切换 -->
-    <nav>
+    <!-- <nav>
         <a href="#/">EN</a>
         <a href="#/zh-cn/">中文</a>
-    </nav>
+    </nav> -->
 
     <!-- 加载时显示的内容 -->
     <div id="app">loading···😊</div>
 
     <script>
         window.$docsify = {
-            //👆封面
             coverpage: true,
+            name: 'Java Learning',
+            maxLevel: 3,
+            subMaxLevel: 5,
+            repo: 'https://github.com/floatLig/JavaLearning',
+
+            //👆封面
+            // coverpage: true,
             // multiple covers
             // coverpage: ['/', '/zh-cn/'],
 
@@ -57,36 +82,43 @@
             // themeColor: '#3F51B5'
 
             //标题
-            name: 'Java Learning',
+            // name: 'Java Learning',
             // nameLink: '/',
 
             //👈左边导航栏
-            loadSidebar: true,
-            autoHeader: true,
+            // loadSidebar: true,
+            // autoHeader: true,
             // maxLevel: 3,
-            subMaxLevel: 5,
+            // subMaxLevel: 5,
 
             //👉右上面导航栏
-            loadNavbar: true,
-            mergeNavbar: true,
+            // loadNavbar: true,
+            // mergeNavbar: true,
 
             //👉绿色小猫跳转到GitHub
-            repo: 'https://github.com/floatLig/JavaLearning',
+            // repo: 'https://github.com/floatLig/JavaLearning',
 
             //不知道是什么东西~
-            alias: {
-                '/.*/_sidebar.md': '/_sidebar.md'
-            },
+            // alias: {
+            //     '/.*/_sidebar.md': '/_sidebar.md'
+            // },
 
             //不知道有什么用
-            auto2top: true,
+            // auto2top: true,
+
+            search: {
+                paths: 'auto',
+                placeholder: '🔍 Type to search ',
+                noData: '😞 No Results! ',
+                // depth: 6
+            },
 
             //👇用于跳转，但是好像没用？
-            pagination: {
-                previousText: '上一章节',
-                nextText: '下一章节',
-                crossChapter: true
-            },
+            // pagination: {
+            //     previousText: '上一章节',
+            //     nextText: '下一章节',
+            //     crossChapter: true
+            // },
 
             // docsify-copy-code (defaults)
             copyCode: {
@@ -112,16 +144,16 @@
     <!-- docsify -->
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
     <!-- java高亮 -->
-    <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
+    <!-- <script src="//unpkg.com/prismjs/components/prism-java.js"></script> -->
     <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
     <!-- javaScript高亮 -->
-    <script src="//unpkg.com/prismjs/components/prism-javascript.js"></script>
+    <!-- <script src="//unpkg.com/prismjs/components/prism-javascript.js"></script> -->
     <script src="//unpkg.com/prismjs/components/prism-javascript.min.js"></script>
     <!-- sql高亮 -->
-    <script src="//unpkg.com/prismjs/components/prism-sql.js"></script>
+    <!-- <script src="//unpkg.com/prismjs/components/prism-sql.js"></script> -->
     <script src="//unpkg.com/prismjs/components/prism-sql.min.js"></script>
     <!-- properties高亮 -->
-    <script src="//unpkg.com/prismjs/components/prism-properties.js"></script>
+    <!-- <script src="//unpkg.com/prismjs/components/prism-properties.js"></script> -->
     <script src="//unpkg.com/prismjs/components/prism-properties.min.js"></script>
     <!-- plugins -->
     <!-- 试一下【:100:】  -->
@@ -137,7 +169,9 @@
     <script src="//unpkg.com/docsify/lib/plugins/ga.min.js"></script> -->
     <!-- 搜索 -->
     <!-- <script src="//unpkg.com/docsify/lib/docsify.min.js"></script> -->
-    <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+    <!-- <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script> -->
+    <!-- <script src="//unpkg.com/docsify/lib/docsify.js"></script> -->
+    <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
 </body>
 
 </html>

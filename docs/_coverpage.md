@@ -12,8 +12,8 @@
 - Using docsify
 
 <!-- Link -->
-[GitHub](https://github.com/floatLig/JavaLearning)
-[Get Started](/_source/contents)
+<!-- [GitHub](https://github.com/floatLig/JavaLearning) -->
+[开始阅读](/README.md)
 
 <!-- background image -->
 <!-- ![](_media/bg.png) -->
