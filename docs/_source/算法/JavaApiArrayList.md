@@ -147,6 +147,9 @@ ensureExplicitCapacity(int minCapacity)用刚刚计算出来的minCapacity判断
 特殊情况进行处理：
 
 ```java
+    //Integer.MAX_VALUE:
+    @Native public static final int   MAX_VALUE = 0x7fffffff;
+
     private static int hugeCapacity(int minCapacity) {
         if (minCapacity < 0) // overflow
             throw new OutOfMemoryError();
@@ -214,7 +217,9 @@ Arrays.copyOf()中调用了System.arraycopy()
 System.arraycopy()是一个native方法【用C、C++实现】
 
 ```java
-    //src:源数组;srcPos:源数组中的起始位置; desc：目标数组；destPos：目标数组中的起始位置；length：要复制的数组元素的数量；
+    //src:源数组;srcPos:源数组中的起始位置;
+    //desc：目标数组；destPos：目标数组中的起始位置；
+    //length：要复制的数组元素的数量；
     public static native void arraycopy(Object src,  int  srcPos,
                                         Object dest, int destPos,
                                         int length);
@@ -267,7 +272,7 @@ ArrayList 源码中有一个 ensureCapacity 方法不知道大家注意到没有
     }
 ```
 
-## 2. 一个实例
+## 2. 测试用例
 
 ```java
     java.util.List<String> list = new ArrayList<>();
