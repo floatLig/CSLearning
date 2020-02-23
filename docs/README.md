@@ -3,6 +3,8 @@
 
 #### Java基础
 
+  - [Java-API](_source/算法/content-JavaApi.md.md)
+
   - [IO](_source/JavaBasics/IO.md)
   - [网络编程](_source/JavaBasics/网络编程.md)
 
@@ -37,8 +39,15 @@
 
 ## ✏️ 算法
 
-  - [Java-API](_source/算法/JavaApiContent.md)
-  - [剑指offer](_source/算法/dsContent.md)
+**原理：**
+
+  - [算法思想](_source/算法/content-algorithm.md)
+  - [Java-API](_source/算法/content-JavaApi.md.md)
+
+**算法题:**
+
+  - [剑指offer](_source/算法/content-ds.md.md)
+  - [leetcode](_source/算法/content-leetcode.md)
 
 ## ☁️ 计算机网络
 
