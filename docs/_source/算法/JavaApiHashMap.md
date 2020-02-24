@@ -7,13 +7,13 @@ HashMap 主要用来存放`键值对`，它基于哈希表的Map接口实现，�
 
 JDK1.8 之前 HashMap 由 数组+链表 组成的，`数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的`（“拉链法”解决冲突）.
 
-<div align="center"> <img src="../../_img/HashMap1.7.png" width="400px"> </div><br>
+<div align="center"> <img src="_img/HashMap1.7.png" width="400px"> </div><br>
 
 数组中的每个位置被当成一个桶，一个桶存放一个链表。
 
 JDK1.8 以后在解决哈希冲突时有了较大的变化，当`链表长度`大于阈值（默认为 8）时，会先进行数组长度的判断，`如果当前数组的长度小于 64`，那么会选择先进行`数组扩容`。如果当前数组的长度大于64，且链表的长度大于8，则会转化为红黑树,具体可以参考 `treeifyBin`方法。
 
-<div align="center"> <img src="../../_img/HashMap数据结构.jpg" width="400px"> </div><br>
+<div align="center"> <img src="_img/HashMap数据结构.jpg" width="400px"> </div><br>
 
 知道了HashMap的底层结构，那HashMap怎么存放元素呢？
 
@@ -147,7 +147,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
     }
 ```
 
-![HashMap_put.png](../../_img/HashMap_put.png)
+![HashMap_put.png](_img/HashMap_put.png)
 
 这里额外提一下，jdk 1.7 使用链表的`头插法`，也就是新的键值对插在链表的头部，而不是链表的尾部。这和jdk1.8的不一样
 
