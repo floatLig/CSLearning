@@ -41,7 +41,7 @@
 
 **原理：**
 
-  - [数据结构与算法详解](_source/算法/content-algorithm.md)
+  - [数据结构与算法](_source/算法/content-algorithm.md)
   - [Java-API](_source/算法/content-JavaApi.md.md)
   - [个人思考](_source/算法/ThinkingSummary.md)
 
