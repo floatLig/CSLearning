@@ -47,7 +47,7 @@
 
 **算法题:**
 
-  - [剑指offer](_source/算法/content-ds.md.md)
+  - [剑指offer](_source/算法/content-剑指offer.md)
   - [leetcode](_source/算法/content-leetcode.md)
 
 ## ☁️ 计算机网络
