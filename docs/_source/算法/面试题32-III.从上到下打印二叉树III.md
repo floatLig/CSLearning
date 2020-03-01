@@ -92,7 +92,7 @@ class Solution {
             int n=q.size();
             for(int i=0;i<n;i++){
                 TreeNode con=q.poll();
-                
+
                 if(k%2==0){
                      temp.addLast(con.val);
                 }
