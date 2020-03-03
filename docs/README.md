@@ -1,4 +1,25 @@
 
+## ✏️ 算法
+
+**原理：**
+
+  - [Java Collection类](_source/算法/content-JavaApi.md.md)
+  - [数据结构与算法](_source/算法/content-algorithm.md)
+  - [个人思考](_source/算法/ThinkingSummary.md)
+
+**算法题:**
+
+  - [剑指offer](_source/算法/content-剑指offer.md)
+  - [leetcode](_source/算法/content-leetcode.md)
+
+## ☁️ 计算机网络
+
+- [计算机网络](_source/计算机网络/cnContent.md)
+
+## 💻 操作系统
+
+- [操作系统原理](_source/操作系统/osContent.md)
+
 ## ☕️ Java
 
 #### Java基础
@@ -36,24 +57,3 @@
   - [SpringMVC概述、注解](_source/springMVC/springMVC01.md)
   - [文件上传、拦截器](_source/springMVC/springMVC02.md)
   - [SSM](_source/springMVC/springMVC03.md)
-
-## ✏️ 算法
-
-**原理：**
-
-  - [数据结构与算法](_source/算法/content-algorithm.md)
-  - [Java-API](_source/算法/content-JavaApi.md.md)
-  - [个人思考](_source/算法/ThinkingSummary.md)
-
-**算法题:**
-
-  - [剑指offer](_source/算法/content-剑指offer.md)
-  - [leetcode](_source/算法/content-leetcode.md)
-
-## ☁️ 计算机网络
-
-- [计算机网络](_source/计算机网络/cnContent.md)
-
-## 💻 操作系统
-
-- [操作系统原理](_source/操作系统/osContent.md)
