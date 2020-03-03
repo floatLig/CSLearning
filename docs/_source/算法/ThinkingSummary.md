@@ -150,20 +150,96 @@ void dfs(node){
 
 ### 二分查找
 
-```java
-int left = 0;
-int right = array.length - 1;
+> 参考链接：<https://labuladong.gitbook.io/algo/suan-fa-si-wei-xi-lie/er-fen-cha-zhao-xiang-jie#ling-er-fen-cha-zhao-kuang-jia>
 
-//一般不用等于
-while(left < right){
-    int mid = left + (right - left) / 2;
-    if(array[mid] == target){
-        return array[mid]；
+`终止条件为：left = right + 1;` ，即 left <= right
+
+传统二分查找
+
+```java
+int binary_search(int[] nums, int target){
+    int left = 0;
+    //right固定写法，这样子确定了查找区间为[left, right]左闭右闭
+    int right = nums.length - 1;
+
+    //左闭右闭[left, right]决定left <= right
+    while(left <= right){
+        //固定写法
+        int mid = left + (right - left) / 2;
+        if(nums[mid] < target){
+            left = mid + 1;
+        }else if(nums[mid] > target){
+            right = mid - 1;
+        }else if(nums[mid] == target){
+            //直接返回
+            return mid;
+        }
     }
-    if(array[mid] < target){
-        left = mid + 1;
-    }else{
-        right = mid - 1;
+
+    //直接返回
+    return -1;
+}
+```
+
+**寻找左侧边界的二分搜索:**
+
+比如说给你有序数组 nums = [1,2,2,2,3]，target 为 2，此算法返回的索引是 2，没错。但是如果我想得到 target 的左侧边界，即索引 1
+
+```java
+int left_bound(int[] nums, int target){
+    int left = 0;
+    int right = nums.length - 1;
+
+    while(left <= right){
+        int mid = left + (right - left) / 2;
+        if(nums[mid] < target){
+            left = mid + 1;
+        }else if(nums[mid] > target){
+            right = mid - 1;
+        }else if(nums[mid] == target){
+            //别返回，收缩左侧边界，使得最后的right落在target的左边
+            right = mid - 1;
+        }
     }
+
+    //最后检查left是否越界
+    //如果不越界，right指向（最左边的）target的左边一个元素，left指向（最左边的）的target
+    //注意，left >= nums.length
+    if(left >= nums.length || nums[left] != target){
+        return -1;
+    }
+    return left;
+}
+```
+
+越界情况:
+
+![二分查找1.jpg](../../_img/二分查找1.jpg)
+
+**寻找右侧边界的二分搜索:**
+
+比如说给你有序数组 nums = [1,2,2,2,3]，target 为 2，此算法返回的索引是 2，没错。但是如果我想得到 target 的右侧边界，即索引 3
+
+```java
+int right_bound(int[] nums, int target){
+    int left = 0;
+    int right = nums.length - 1;
+    while(left <= right){
+        int mid = left + (right - left) / 2;
+        if(nums[mid] < target){
+            left = mid + 1;
+        }else if(nums[mid] > target){
+            right = mid - 1;
+        }else if(nums[mid] == target){
+            //别返回，收缩右侧边界
+            left = mid + 1;
+        }
+    }
+
+    //最后要检查right越界的情况
+    if(right < 0 || nums[right] != target){
+        return -1;
+    }
+    return right;
 }
 ```
