@@ -247,3 +247,24 @@ int right_bound(int[] nums, int target){
     return right;
 }
 ```
+
+### 链表
+
+```java
+//新将一个结点，这个结点的next指向原链表的头结点
+Node res = new Node(-1);
+res.next = head;
+····
+return res.next;
+
+//cur != null 遍历链表
+Node cur = res.next;
+while(cur != null){
+    ····
+    //指向next
+    cur = cur.next;
+}
+
+//如果有指向next.next，需要进行判断，如：
+cur = (cur.next == null) ? null : cur.next.next;
+```
