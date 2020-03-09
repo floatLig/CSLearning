@@ -128,7 +128,11 @@ for(int i = 0; i < nums.length; i++){
 }
 ```
 
-### 3. 多叉树、暴力法
+### 3. 记忆化搜索
+
+![记忆化搜索.jpg](../../_img/记忆化搜索.jpg)
+
+### 4. 多叉树、暴力法
 
 如果不是二叉树，而是多叉树，或者是决策树（多个分支），将左右子树遍历替换为for遍历全部结点
 
@@ -152,7 +156,7 @@ void dfs(node){
 }
 ```
 
-### 二分查找
+### 5. 二分查找
 
 > 参考链接：<https://labuladong.gitbook.io/algo/suan-fa-si-wei-xi-lie/er-fen-cha-zhao-xiang-jie#ling-er-fen-cha-zhao-kuang-jia>
 
@@ -248,7 +252,7 @@ int right_bound(int[] nums, int target){
 }
 ```
 
-### 链表
+### 6. 链表
 
 ```java
 //新将一个结点，这个结点的next指向原链表的头结点
