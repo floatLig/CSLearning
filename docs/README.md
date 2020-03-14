@@ -27,6 +27,7 @@
 #### Java基础
 
   - [Java基础](_source/JavaBasics/Java基础.md)
+  - [Java虚拟机](_source/JavaBasics/Java虚拟机.md)
   - [Java-API](_source/算法/content-JavaApi.md.md)<br><br>
   - [IO](_source/JavaBasics/IO.md)
   - [网络编程](_source/JavaBasics/网络编程.md)
