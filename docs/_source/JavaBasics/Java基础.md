@@ -593,6 +593,164 @@ Effective Java书上讲到，最好不要去使用clone(),可以使用拷贝构�
 
 Java中有三个访问权限修饰符：private、protected以及public，如果不加访问修饰符表示包级可见。
 
+|     /     | 本类其他方法使用 | 本包(package)其他类使用 | 本包(package)其他类使用，并且非本包的子类也能使用 | 所有类可以使用 |
+| :-------: | :--------------: | :---------------------: | :-----------------------------------------------: | :------------: |
+|  public   |        √         |            √            |                         √                         |       √        |
+| protected |        √         |            √            |                         √                         |       ×        |
+|  default  |        √         |            √            |                         ×                         |       ×        |
+|  private  |        √         |            ×            |                         ×                         |       ×        |
+
+protected用于修饰成员，表示在继承体系中成员对于子类可见，但是这个访问修饰符对于类没有意义。
+
+良好的设计的模块会隐藏所有的细节实现，把它的API与它的实现清晰的隔离开。模块之间只通过它们的API进行通信，一个模块不需要知道其他模块的内部工作情况，这个概念称为信息隐藏或封装。因此访问权限应当尽可能使每个类或成员不被外界访问。
+
+如果子类的方法重写了父类的方法，那么子类中该方法的访问级别不允许低于父类的访问级别。这是为了确保可以使用父类实例的地方都可以使用子类实例去替代，也就是确保满足`里氏替换原则`。
+
+`字段决不能是公有的`，因为这么做的话就失去了对这个字段修改行为的控制，客户端可以对其随意修改。例如下面的例子中，AccessExample 拥有 id 公有字段，如果在某个时刻，我们想要使用 int 存储 id 字段，那么就需要修改所有的客户端代码。
+
+### 抽象类与接口
+
+#### 1. 抽象类
+
+抽象类和抽象方法都使用abstract关键字进行声明。如果一个类中包含抽象方法，那么这个类必须声明为抽象类。
+
+`抽象类和抽象方法的最大区别是：抽象类不能被实例化，只能被继承。`
+
+```java
+public abstract class AbstractClassExample {
+
+    protected int x;
+    private int y;
+
+    public abstract void func1();
+
+    public void func2() {
+        System.out.println("func2");
+    }
+}
+```
+
+#### 2. 接口
+
+接口是类的延伸，在JDK 8之前，它可以看成是一个完全抽象的类，也就是说不能有任何的方法实现。
+
+`从JDK 8开始，接口也可以有默认的方法实现`，这是因为不支持默认的接口维护成本太高了。在JDK 8之前，如果一个接口想要添加新的方法，那么要修改所有实现了该接口的类，让它们都实现新增的方法。
+
+- `接口的默认属性是：public static final`
+- `接口的默认方法是：public 且 函数体不能有内容`
+- `接口默认方法的实现：default (实例创建时才有) / static (类加载时就有了)`
+- 且不允许定义成其他，如private，protected等
+
+```java
+public interface InterfaceExample {
+
+    void func1();               //默认是public，且不能有函数体
+
+    default void func2(){       //要实现函数体，必须设置为default（对象实例的方法），或者是static（类方法）
+        System.out.println("func2");
+    }
+
+    static void staticFunc3(){  //static方法
+        System.out.println("staticFunc3");
+    }
+
+    int INTERFACE_X = 123;            //默认为public static final,且不能为其他
+    // int y;               // Variable 'y' might not have been initialized
+    public int INTERFACE_Z = 0;       // Modifier 'public' is redundant(多余的) for interface fields
+    // private int k = 0;   // Modifier 'private' not allowed here
+    // protected iXnt l = 0; // Modifier 'protected' not allowed here
+    // private void fun3(); // Modifier 'private' not allowed here
+}
+```
+
+### super()
+
+- 访问父类的构造函数：可以使用super()函数访问父类的构造函数，从而委托完成一些初始化的工作。应该注意到，子类一定会调用父类的构造函数来完成初始化工作，一般是调用父类的默认构造函数，如果子类需要调用父类其他的构造函数，那么就可以使用super()函数。
+- 访问父类的成员：如果子类重写了父类的某个方法，可以通过super关键字来引用父类的方法实现。
+
+### 重写与重载
+
+#### 1. 重写（Override）
+
+`存在于继承体系中`，指子类实现了一个与父类在方法上声明完成相同的一个方法。
+
+为了满足里氏替换原则,重写有以下三个权限：
+
+- 子类方法的访问权限必须大于等于父类方法；
+- 子类方法的返回类型必须是父类方法返回类型或为子类型；
+- 子类方法抛出的异常必须是父类抛出异常或为子类型。
+
+使用@Override注解，可以让编译器帮忙检查是否满足上面三个限制条件。
+
+在调用一个方法时，先从本类中查找看是否有对应的方法，如果没有再到父类中查看，看是否从父类继承来。否则就要对参数进行转型，转成父类之后看是否有对应的方法。总的来说，方法调用的优先级为：
+
+- this.func(this)
+- super.func(this)
+- this.func(super)
+- super.func(super)
+
+```java
+class A {
+
+    public void show(A obj) {
+        System.out.println("A.show(A)");
+    }
+
+    public void show(C obj) {
+        System.out.println("A.show(C)");
+    }
+}
+
+class B extends A {
+
+    @Override
+    public void show(A obj) {
+        System.out.println("B.show(A)");
+    }
+
+    public void showSelf(){
+        System.out.println("Show Self");
+    }
+}
+
+class C extends B {
+}
+
+class D extends C {
+}
+```
+
+```java
+public static void main(String[] args) {
+
+    A a = new A();
+    B b = new B();
+    C c = new C();
+    D d = new D();
+
+    // 在 A 中存在 show(A obj)，直接调用
+    a.show(a); // A.show(A)
+    // 在 A 中不存在 show(B obj)，将 B 转型成其父类 A
+    a.show(b); // A.show(A)
+    // 在 B 中存在从 A 继承来的 show(C obj)，直接调用
+    b.show(c); // A.show(C)
+    // 在 B 中不存在 show(D obj)，但是存在从 A 继承来的 show(C obj)，将 D 转型成其父类 C
+    b.show(d); // A.show(C)
+
+    // 引用的还是 B 对象，所以 ba 和 b 的调用结果一样
+    A ba = new B();
+    ba.show(c); // A.show(C)
+    ba.show(d); // A.show(C)
+    // ba.showSelf();   A ba = new B();只能调用A和B共有的方法。B私有的方法不能调用。但是调用的共有的方法却以B的实现为主
+}
+```
+
+### 重载
+
+存在于`同一个类中`，指一个方法与已经存在的方法名称上相同，但是`参数类型、个数、顺序`至少有一个不同。
+
+应该注意的是，`返回值不同，其它都相同不算是重载`。因为从编译器的角度来看，它会将一个函数签名（`包括它的函数名&参数列表`）以前缀或后缀的方式组织成一个名称。这里不包括它的返回值，所以从编译器的角度来来看，这两个函数是同一个，区分不开。或者简单来说，`编译器不知道你要返回什么值`。
+
 ## 七、反射
 
 每个类都有一个Class对象，包含了与类有关的信息。当编译一个新类时，会产生一个同名的.class文件，该文件内容保存着Class对象。
@@ -619,4 +777,24 @@ Class和java.lang.reflect一起对反射提供了支持，java.lang.reflect类�
 
 - **性能开销：**反射涉及了动态类型的解析，所以JVM无法对这些代码进行优化。因此，反射操作的效率比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。
 - **安全限制：**使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在安全限制的环境中运行，如Applet，那么这就是个问题了。
-- **内容暴露：**由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有属性和方法），所以使用反射可能导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变时，代码的行为可以随之变化。~
+- **内容暴露：**由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有属性和方法），所以使用反射可能导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变时，代码的行为可以随之变化。
+
+## 八、异常
+
+Throwable可以用来表示任何可以作为异常抛出的类，分为两种：Error 和 Exception。Error用来表示JVM无法处理的错误，Exception分为两种：
+
+- `受检异常`：需要用try..catch..语句捕获并进行处理，并且可以从异常中恢复；
+- 非受检异常：是程序运行时错误，例如除0会引发Arithmetic Exception,此时程序崩溃并且无法恢复。
+
+![java基础02.png](../../_img/java基础02.png)
+
+## 九、泛型
+
+```java
+public class Box<T> {
+    // T stands for "Type"
+    private T t;
+    public void set(T t) { this.t = t; }
+    public T get() { return t; }
+}
+```
