@@ -1,10 +1,5 @@
 ## Java 虚拟机
 
-## 参考资料
-
-- [cyc：Java 虚拟机](https://cyc2018.github.io/CS-Notes/#/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA?id=minor-gc-%e5%92%8c-full-gc)
-- [程序员小灰：聊一聊jvm模型](https://mp.weixin.qq.com/s?__biz=MzIxMjE5MTE1Nw==&mid=2653193961&idx=2&sn=cdfa0d38829a0dc1ad5d23350e1aca90&chksm=8c99f433bbee7d25f353b6156375a0d0d430080e1c7489f47499fa3f4051e0fa4449811cfddb&mpshare=1&scene=24&srcid=0918qfGbysTlfjPXmduulgUo&sharer_sharetime=1568776478467&sharer_shareid=1bfcc99ef12aaea8b1dde0097af37dff&key=cae512a5b65f4701f2382ff2ea363791318ad3ccb1f206af7e178692374df6394ad60f19f75dddaad89a6b57ccdca959b3722b18cb3778129629cbf5dd21ae757f30aff12229ee8ff003b8e1abd0584c&ascene=14&uin=OTg4ODk0OTA5&devicetype=Windows+10&version=62080079&lang=zh_CN&exportkey=Ax95PJWj0XFP8cIoZnsOTl0%3D&pass_ticket=wmWQbrM10jrZn1o2ipbB1KchZd7GRFWavJBPTlWNtX5ZcirmusiDgc3tZ2kp3J0U)
-
 ### 运行时的数据区域
 
 ![jvm1.jpg](../../_img/jvm1.jpg)
@@ -410,3 +405,8 @@ System.out.println(ConstClass.HELLOWORLD);
 ### 类加载机制
 
 ![jvm10.png](../../_img/jvm10.png)
+
+## 参考资料
+
+- [cyc：Java 虚拟机](https://cyc2018.github.io/CS-Notes/#/notes/Java%20%E8%99%9A%E6%8B%9F%E6%9C%BA?id=minor-gc-%e5%92%8c-full-gc)
+- [程序员小灰：聊一聊jvm模型](https://mp.weixin.qq.com/s?__biz=MzIxMjE5MTE1Nw==&mid=2653193961&idx=2&sn=cdfa0d38829a0dc1ad5d23350e1aca90&chksm=8c99f433bbee7d25f353b6156375a0d0d430080e1c7489f47499fa3f4051e0fa4449811cfddb&mpshare=1&scene=24&srcid=0918qfGbysTlfjPXmduulgUo&sharer_sharetime=1568776478467&sharer_shareid=1bfcc99ef12aaea8b1dde0097af37dff&key=cae512a5b65f4701f2382ff2ea363791318ad3ccb1f206af7e178692374df6394ad60f19f75dddaad89a6b57ccdca959b3722b18cb3778129629cbf5dd21ae757f30aff12229ee8ff003b8e1abd0584c&ascene=14&uin=OTg4ODk0OTA5&devicetype=Windows+10&version=62080079&lang=zh_CN&exportkey=Ax95PJWj0XFP8cIoZnsOTl0%3D&pass_ticket=wmWQbrM10jrZn1o2ipbB1KchZd7GRFWavJBPTlWNtX5ZcirmusiDgc3tZ2kp3J0U)
