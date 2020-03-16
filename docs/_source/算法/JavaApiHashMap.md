@@ -147,7 +147,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
     }
 ```
 
-![HashMap_put.png](_img/HashMap_put.png)
+![HashMap_put.png](../../_img/HashMap_put.png)
 
 这里额外提一下，jdk 1.7 使用链表的`头插法`，也就是新的键值对插在链表的头部，而不是链表的尾部。这和jdk1.8的不一样
 

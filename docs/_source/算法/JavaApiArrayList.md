@@ -52,8 +52,6 @@ ArrayList有三种方式来初始化，构造方法源码如下：
 
 3. 参数为Collection的构造函数
 
-//TODO: Collection
-
 ```java
     /**
     *构造包含指定collection元素的列表，将这些元素复制到ArrayList中
@@ -270,6 +268,21 @@ ArrayList 源码中有一个 ensureCapacity 方法不知道大家注意到没有
         if (index >= size)
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
     }
+```
+
+### 1.8 同步
+
+ArrayList()是线程不安全的类。可以使用`Collections.synchronizedList()`得到一个线程安全的ArrayList.
+
+```java
+List<String> list = new ArrayList<>();
+List<String> synList = Collections.synchronizedList(list);
+```
+
+也可以使用concurrent并发包下的CopyOnWriteArrayList类
+
+```java
+List<String> list = new CopyOnWriteArrayList<>();
 ```
 
 ## 2. 测试用例
