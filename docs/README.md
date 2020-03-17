@@ -20,7 +20,8 @@
 ## 💻 操作系统
 
 - [操作系统原理](_source/操作系统/osContent.md)
-- [思考](_source/操作系统/面试题.md)
+- [思考](_source/操作系统/面试题.md)<br><br>
+- [Linux常见命令](_source/操作系统/Linux常见命令.md)
 
 ## ☕️ Java
 
