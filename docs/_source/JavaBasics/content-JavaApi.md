@@ -15,3 +15,7 @@
 | 修改 | set(`index`, element)         | <br>set(`index`, element)<br><br>                                                                      | /             | `put`(key, value)           | `put`(key, value) |
 | 查询 | get(`index`)                  | `getFirst`()<br><br> `getLast`() <br><br> get(index)                                                   | peek()        | `get`(key)                  |
 | 遍历 | foreach <br><br> for + size() | foreach <br><br> for + size()                                                                          | /             | entrySet()<br><br> keySet() |
+
+## 其他
+
+- [Comparable和Comparator](_source/JavaBasics/Comparable.md)
