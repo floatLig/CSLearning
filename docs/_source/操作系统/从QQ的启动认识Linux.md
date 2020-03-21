@@ -30,6 +30,8 @@ QQ 启动之后，有一部分代码会在显示器上画一个对话框，并�
 
 所以说，哪有什么岁月静好，只不过有人替你负重前行。而操作系统就扮演了这样一个负重前行的角色。
 
+方便理解，你可以将Linux看成一家外包公司。一个项目的运行要使用公司的服务，那就应该去办事大厅，也就是说，程序应该使用`系统调用`。
+
 ![操作系统内核体系结构图.jpeg](../../_img/操作系统内核体系结构图.jpeg)
 
 #### Linux源码
@@ -54,3 +56,8 @@ Linux源码有很多东西，一开始看会很容易让人摸不清楚头脑。
 | 网络管理    | net/                                                   |
 | 进程间通信  | ipc/                                                   |
 | Linux初始化 | init/                                                  |
+
+#### 参考链接
+
+- [刘超：你可以把Linux内核当成一家软件外包公司](https://time.geekbang.org/column/article/88060)
+- [Overview of the Kernel Source](https://courses.linuxchix.org/kernel-hacking-2002/08-overview-kernel-source.html)
