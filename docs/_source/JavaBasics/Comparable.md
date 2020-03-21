@@ -103,13 +103,14 @@ class People implements Comparable<People>{
 
 ## 2. Comparator
 
-Comparator的源码：
+Comparator的`核心`源码：
 
 ```java
-publicinterface Comparator<T> {
-    int compare(T o1, T o2);
-    boolean equals(Object obj);
-}
+    //
+    publicinterface Comparator<T> {
+        int compare(T o1, T o2);
+        boolean equals(Object obj);
+    }
 ```
 
 第一个方法 compare(T o1, T o2) 的返回值可能为负数，零或者正数，代表的意思是第一个对象小于、等于或者大于第二个对象。
@@ -118,3 +119,71 @@ publicinterface Comparator<T> {
 
 什么时候用Comparator好呢？
 
+`我们想让类保持它的原貌，不想主动实现 Comparable 接口，但我们又需要它们之间进行比较`，这个时候我们可以定义一个`比较器`来继承Comparator。
+
+原类可以保持不变：
+
+```java
+class People implements Comparable<People>{
+    private String sex;
+    private int age;
+    private String name;
+    
+    //节约篇幅，这里申请get(),set(),toString()方法
+}
+```
+
+定义一个比较器PeopleComparator继承Comparator接口
+
+```java
+class PeopleComparator implements Comparator<People> {
+    @Override
+    public int compare(People o1, People o2) {
+        //优先以性别排序
+        int flag = o1.getSex().compareTo(o2.getSex());
+        //性别相同再以年龄排序
+        if(flag == 0){
+            flag = o1.getAge() - o2.getAge();
+            //年龄相同再以姓名排序
+            if(flag == 0){
+                flag = o1.getName().compareTo(o2.getName());
+            }
+        }
+        return flag;
+    }
+}
+```
+
+再来看看测试类：
+
+```java
+        peopleArrayList.sort(new PeopleComparator());
+        for(People p : peopleArrayList){
+            System.out.println(p);
+        }
+
+        //运行结果同之前的一样
+
+        //比较
+        System.out.println(new PeopleComparator().compare(p1, p2));
+        
+        //运行结果：1
+```
+
+## 使用Comparable 还是 Comparator
+
+通过上面的两个例子可以比较出 Comparable 和 Comparator 两者之间的区别：
+
+一个类实现了 Comparable 接口，意味着该类的对象可以直接进行比较（排序），但`比较（排序）的规则就固定了`。而且
+
+一个类如果想要`保持原样`，又需要`进行不同方式的比较（排序`），就可以`不同的定制比较器`（实现 Comparator 接口）。
+
+Comparable 接口在 java.lang 包下，而 Comparator 接口在 java.util 包下，算不上是亲兄弟，但可以称得上是表（堂）兄弟。
+
+举个不恰当的例子。我想从洛阳出发去北京看长城，体验一下好汉的感觉，要么坐飞机，要么坐高铁；但如果是孙悟空的话，翻个筋斗就到了。我和孙悟空之间有什么区别呢？孙悟空`自己实现了 Comparable 接口`（他那年代也没有飞机和高铁，没得选），而我`可以借助 Comparator 接口`（现代化的交通工具）。
+
+总而言之，如果对象的排序需要基于自然顺序，请选择 Comparable，如果需要按照对象的不同属性进行排序，请选择 Comparator。
+
+## 参考链接
+
+- [鸭血粉丝:一文搞懂Comparable和Comparator](https://mp.weixin.qq.com/s?src=11&timestamp=1584607862&ver=2225&signature=dCv-jvJlNI*yVNS4RWneh75Lc4J2buLzlWFTNfDy7RKl2cEYeDETWL7buW2H4slgSPjSCaV6GBHGdUfTAm9zUOk2Cv0hDZ-oQgfIW*jYmu4pNmX58yYIB8FGt0i2gUNc&new=1)
