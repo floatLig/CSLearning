@@ -2,6 +2,7 @@
 
 ### 原理
 
+- [从BIOS到bootloader](_source/操作系统/从BIOS到bootloader.md)
 - [从QQ的启动认识Linux.md](_source/操作系统/从QQ的启动认识Linux.md)
 
 ### 应用

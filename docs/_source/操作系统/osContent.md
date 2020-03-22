@@ -15,7 +15,6 @@
   - [习题](_source/操作系统/习题.md)
   - [零碎知识点](_source/操作系统/小知识.md)
 
-### 极客时间知识点补充
+### 计算机组成原理
 
   - [计算机组成原理](_source/操作系统/计算机组成原理.md)
-  - [从BIOS到bootloader](_source/操作系统/从BIOS到bootloader.md)
