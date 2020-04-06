@@ -61,3 +61,7 @@
   - [SpringMVC概述、注解](_source/springMVC/springMVC01.md)
   - [文件上传、拦截器](_source/springMVC/springMVC02.md)
   - [SSM](_source/springMVC/springMVC03.md)
+
+## 架构
+
+- [秒杀系统的设计与实现](_source/架构/秒杀系统的设计与实现.md)
