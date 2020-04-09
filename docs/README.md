@@ -62,6 +62,10 @@
   - [文件上传、拦截器](_source/springMVC/springMVC02.md)
   - [SSM](_source/springMVC/springMVC03.md)
 
-## 架构
+### Redis
 
-- [秒杀系统的设计与实现](_source/架构/秒杀系统的设计与实现.md)
+  - [Redis入门](_source/架构/Redis.md)
+
+### 系统设计
+
+  - [秒杀系统的设计与实现](_source/架构/秒杀系统的设计与实现.md)
