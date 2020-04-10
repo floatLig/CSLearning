@@ -272,3 +272,69 @@ while(cur != null){
 //如果有指向next.next，需要进行判断，如：
 cur = (cur.next == null) ? null : cur.next.next;
 ```
+
+### 7. 动态规划
+
+思路：
+
+```
+变化的变量 ==》 【递归树】 ==》 最优子 / 看当前层的情况下，能不能找到状态转移方程 
+==》 画出递归树，看看有没有重叠子问题 ==》 利用dp,记忆化进行优化
+```
+
+**注意，在写DP时，遍历是正向遍历呢，反向遍历呢，还是斜线遍历呢？取决于：**
+
+1. 遍历的过程中，**所需的状态必须是已经计算出来的**【状态转移】
+2. 遍历的**终点**必须是存储结果的那个位置
+
+**记忆化：**
+
+```java
+private int recur(int index){
+    //递归终止条件
+    if(  ){
+        return XX;
+    }else if( ){
+        //可能根据不同的条件 return不同的值
+        return XX;
+    }
+
+    //记忆化返回
+    if(mem[index] != 0){
+        return mem[index];
+    }
+
+    //假设求的是最小值
+    int min = Integer.MAX_VALUE;
+    //递归树 的不同选择
+    for(int coin : coins){
+        if(  ){
+            min = XX;
+        }
+    }
+    //写入dp
+    mem[index] = min == Integer.MAX_VALUE ? -1 : 0;
+
+    //返回
+    return mem[index]
+}
+```
+
+**dp:**
+
+```java
+int[] dp = new int[XX + 1];
+//初始化
+Arrays.fill(dp, XX);
+dp[0] = 0;
+
+for(int i = 1; i < XX; i++){
+    for(int coin : coins){
+        if(  ){
+            dp[i] = Math.min(XX);
+        }
+    }
+}
+
+return dp[XX];
+```
