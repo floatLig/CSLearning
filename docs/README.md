@@ -65,6 +65,7 @@
 ### 中间件
 
   - [Redis入门](_source/中间件/Redis.md)
+  - [Redis思考](_source/中间件/Redis面试.md)
 
 ### 实践
 

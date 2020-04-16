@@ -623,3 +623,295 @@ public class JRedisTest {
 }
 
 ```
+
+## 7. Redis.conf
+
+Redis启动的时候，命令为`redis-server /usr/local/redis/redis.conf`, 需要通过配置文件启动。
+
+```bash
+在配置文件中，进行单位的确定，1k 和 1kb的区别
+1k => 1000 bytes
+1kb => 1024 bytes
+1m => 1000000 bytes
+1mb => 1024*1024 bytes
+1g => 1000000000 bytes
+1gb => 1024*1024*1024 bytes
+
+
+
+在该配置文件中，大小写不敏感
+units are case insensitive so 1GB 1Gb 1gB are all the same.
+
+
+好比写程序的import、include，同时有一点需要注意，如果该文件是在开头引入，
+在该文件中又对某些属性进行更正，属性的值会被覆盖。
+如果不想该属性的值被覆盖，可以在配置文件的最后面添加
+include /path/to/local.conf
+include /path/to/other.conf
+
+################################ MODULES #####################################
+
+加载模块
+loadmodule /path/to/my_module.so
+loadmodule /path/to/other_module.so
+
+################################ NETWORK #####################################
+
+Redis默认会监听所有的端口，但是，最好还是能够选择特定的端口进行监听。如果想要选择特定
+的端口，进行如下配置：
+ Examples:
+
+bind 192.168.1.100 10.0.0.1
+bind 127.0.0.1 ::1
+
+Redis 推荐只监听本地端口
+bind 127.0.0.1
+
+如果连接到Redis的不是本地实例loopback，或者你没有设置指定的端口才能连接，你应该打开保护模式
+protected-mode yes
+
+如果是0，则redis不监听TCP socket
+port 6379
+
+TCP积压，如果处于高并发的环境下，积压应该设置一个相对高的值
+tcp-backlog 511
+
+TCP连接后，多少秒断开连接，如果设置为0，则不使用
+timeout 0
+
+发送ACK保持连接
+tcp-keepalive 300
+
+################################# GENERAL #####################################
+
+Redis以守护进程运行 [后台运行]
+daemonize yes
+
+如果一个程序以守护进程运行，你可以设置重命名此文件，否则会默认创建redis.pid
+pidfile /var/run/redis.pid
+
+设置日志级别，他可能是
+# debug (a lot of information, useful for development/testing)
+# verbose (many rarely useful info, but not a mess like the debug level)
+# notice (moderately verbose, what you want in production probably)
+# warning (only very important / critical messages are logged)
+loglevel notice
+
+logfile /usr/local/redis/redis.log
+
+系统日志
+syslog-enabled no
+
+有多少个数据库
+databases 16
+
+启动redis是否出现打印出logo
+always-show-logo yes
+
+################################ SNAPSHOTTING  ################################
+
+#   In the example below the behaviour will be to save:
+#   after 900 sec (15 min) if at least 1 key changed
+#   after 300 sec (5 min) if at least 10 keys changed
+#   after 60 sec if at least 10000 keys changed
+save 900 1
+save 300 10
+save 60 10000
+
+如果持久化出错，是否还继续工作
+stop-writes-on-bgsave-error yes
+
+压缩rdb文件，但是会消耗一些CPU资源
+rdbcompression yes
+
+rdbchecksum yes
+
+文件名
+dbfilename dump.rdb
+
+XXX.rdb存放的位置
+dir /usr/local/redis/data
+
+################################# REPLICATION #################################
+配置master服务器的IP和端口，当然，你可以不在这里设置。而是用命令行: slaveof ip port
+replicaof <masterip> <masterport>
+
+如果master有设置了密码，则需要写上master的密码
+masterauth <master-password>
+
+################################## SECURITY ###################################
+
+本redis的密码
+requirepass root
+
+################################### CLIENTS ####################################
+
+能够连接上redis的最大客户端的数量
+maxclients 10000
+
+Redis配置的最大内存
+maxmemory <bytes>
+
+内存到达上限之后的处理策略
+maxmemory-policy noeviction 
+1、volatile-lru：只对设置了过期时间的key进行LRU（默认值）
+2、allkeys-lru ： 删除lru算法的key
+3、volatile-random：随机删除即将过期key
+4、allkeys-random：随机删除
+5、volatile-ttl ： 删除即将过期的
+6、noeviction ： 永不过期，返回错误
+
+默认不开启aof
+appendonly no
+
+aof的文件名
+appendfilename "appendonly.aof"
+
+每次修改都会修改aof，消耗性能
+# appendfsync always
+每秒执行一次sync，可能会丢失这1的数据
+appendfsync everysec
+不执行sync，这个时候操作系统自己同步数据
+# appendfsync no
+```
+
+## 8. Redis持久化
+
+Redis是内存数据库，如果不将数据库状态保存到磁盘，那么一旦服务器进程退出，服务器中的数据库状态也会消失，所以Redis提供了持久化功能。
+
+### 8.1 RDB（Redis DataBase）
+
+在主从复制中，rdb就是备用了！放在**从机**上面
+
+在`指定的时间间隔`将内存中的数据集快照写入磁盘，即snapshot快照。恢复时时`将快照中的文件`直接读到内存里。
+
+Redis会单独创建`fork一个子进程`来进行持久化，会先将数据写入到`一个临时文件`中，待持久化过程都结束了，再用这个临时文件替换上次持久化好的文件。整个过程中，主进程是不进行任何IO操作的。这就确保了极高的性能。如果需要`进行大规模数据的恢复`，且对于数据恢复的完整性不是很敏感，那么RDB方式要比AOF方式更加有效。RDB的缺点是`最后一次持久化后的数据可能丢失`。我们默认就是RDB，一般情况下不需要修改这个配置.
+
+有时候，我们在生产环境中会将这个文件进行备份！
+
+上面我们讲到了redis.conf里的配置
+
+```bash 
+
+################################ SNAPSHOTTING  ################################
+
+#   In the example below the behaviour will be to save:
+#   after 900 sec (15 min) if at least 1 key changed
+#   after 300 sec (5 min) if at least 10 keys changed
+#   after 60 sec if at least 10000 keys changed
+save 900 1
+save 300 10
+save 60 10000
+
+如果持久化出错，是否还继续工作
+stop-writes-on-bgsave-error yes
+
+压缩rdb文件，但是会消耗一些CPU资源
+rdbcompression yes
+
+rdbchecksum yes
+
+文件名
+dbfilename dump.rdb
+
+XXX.rdb存放的位置
+dir /usr/local/redis/data
+
+```
+
+**触发机制：**
+
+1. [save 900 1]的规则满足的情况下，会自动触发RDB规则
+2. 执行flushall命令的时候，直接触发RDB，清空RDB
+3. 退出Redis，也会产生RDB文件
+
+写回到磁盘自动生成dump.rdb
+
+**优点：**
+
+1. 适合大规模的数据恢复
+
+**缺点：**
+
+1. 对数据的完整性要求不高的情况下才能用，如果发生宕机，则可能会失去一部分数据
+2. fork的时候，占用内存
+
+### 8.2 AOF （Append Only File）
+
+以日志的形式来记录每个写操作，将Redis执行过的所有指令`记录下来`（读操作不记录）。只允许`追加文件而不改写文件`，Redis启动之初会读取文件重新构建数据，换言之，Redis重启的话就根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复。
+
+AOF保存的是`appendonly.aof`
+
+AOF默认是不开启的，我们需要手动配置。我们只需要将appendonly改为yes就可以开启AOF！重启，Redis就可以生效了。
+
+```bash
+默认不开启aof
+appendonly no
+
+aof的文件名
+appendfilename "appendonly.aof"
+```
+
+这里注意一下，appendonly.aof是可读文件，如果该文件被恶意修改了，Redis官方提供了`redis-check-aof --fix XXX.aof`这个工具来修复文件，但是，被恶意修改的部分是会被删除 (修复不回来，能将没有被修改的数据恢复)
+
+AOF默认就是文件的无线追加，文件会越来越大。
+
+**优点：**
+
+1. 每一次修改都会同步，文件的完整性会更好
+2. 每秒同步一次（当然你也可以设置每步操作都同步，但是费时），丢失的数据更少
+
+**缺点：**
+
+AOF运行效率比RDB慢的多
+
+## 9. Redis发布订阅
+
+Redis发布订阅（pub / sub）是一种消息通信模型：发送者（pub）发送消息，订阅者（sub）接收消息。微信、微博、关注系统。
+
+![Redis发布系统.jpg](../../_img/Redis发布系统.jpg)
+
+## 10. 主从复制
+
+主从复制，是将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点（master / leader），后者称为从节点（slave / follower），`数据的复制是单向的`，只能由主节点到从节点。`Master以写为主，Slave以读为主`。
+
+默认情况下，每台Redis服务器都是主节点。一个主节点可以有很多个从节点，但是一个从节点只能有一个主节点。
+
+**主从复制的作用主要包括：**
+
+1. 数据冗余：热备份
+2. 故障恢复
+3. 负载均衡
+4. 高可用（集群）基石
+
+一般来说，要将Redis运用于工程项目中，只使用一台Redis是万万不能的。万一该服务器宕机了，那可就完了呀。
+
+所以一般采用以下结构：
+
+![读写分离.jpg](../../_img/读写分离.jpg)
+
+主从复制，读写分离。80%的情况都是在进行读操作。
+
+命令行操作：
+
+复制3个配置文件，然后修改对应的信息
+1、端口
+2、pid 名字
+3、log文件名字
+4、dump.rdb 名字
+
+```bash
+ls
+redis6379.conf  redis6380.conf  redis6381.conf 
+
+认老大：一主(79)二从(80, 81)
+<127.0.0.1:6380> slaveof 127.0.0.1 6370
+
+<127.0.0.1:6380> info repository
+```
+
+真实的从主配置应该在配置文件中配置，这样的话是永久的，我们这里使用的是命令，暂时的！
+
+**复制原理：**
+
+slave启动成功连接到master后会发送一个sync同步命令。Master接到命令，将整个数据文件传到slave，并完成一次完全同步。
