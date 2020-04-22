@@ -28,10 +28,12 @@
 #### Java基础
 
   - [Java基础](_source/JavaBasics/Java基础.md)
-  - [Java虚拟机](_source/JavaBasics/Java虚拟机.md)
+  - [Java虚拟机概述](_source/JavaBasics/Java虚拟机.md)
+  - [Java内存模型与线程](_source/JavaBasics/Java内存模型与线程.md)
   - [Java-API](_source/JavaBasics/content-JavaApi.md)<br><br>
   - [IO](_source/JavaBasics/IO.md)
-  - [网络编程](_source/JavaBasics/网络编程.md)
+  - [网络编程](_source/JavaBasics/网络编程.md)<br><br>
+  - [思考](_source/JavaBasics/面试题.md)
 
 #### B/S
 
