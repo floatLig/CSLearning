@@ -5,12 +5,11 @@
 
   - [Java Collection类](_source/算法/content-JavaApi.md.md)
   - [数据结构与算法](_source/算法/content-algorithm.md)
-  - [个人思考](_source/算法/ThinkingSummary.md)
+  - [总结思考](_source/算法/ThinkingSummary.md)
 
 **算法题:**
 
-  - [剑指offer](_source/算法/content-剑指offer.md)
-  - [leetcode](_source/算法/content-leetcode.md)
+  - [算法题练习](_source/算法/content-算法题.md)
 
 ## ☁️ 计算机网络
 
