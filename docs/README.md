@@ -3,7 +3,7 @@
 
 **原理：**
 
-  - [Java Collection类](_source/算法/content-JavaApi.md.md)
+  - [Java中关于数据结构的API](_source/算法/content-JavaApi.md.md)
   - [数据结构与算法](_source/算法/content-algorithm.md)
   - [总结思考](_source/算法/ThinkingSummary.md)
 
