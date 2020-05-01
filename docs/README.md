@@ -32,7 +32,6 @@
   - [Java-API](_source/JavaBasics/content-JavaApi.md)<br><br>
   - [IO](_source/JavaBasics/IO.md)
   - [网络编程](_source/JavaBasics/网络编程.md)<br><br>
-  - [思考](_source/JavaBasics/面试题.md)
 
 #### B/S
 
@@ -68,6 +67,7 @@
   - [Redis入门](_source/中间件/Redis.md)
   - [Redis思考](_source/中间件/Redis面试.md)
 
-### 实践
+### 面试
 
-  - [秒杀系统的设计与实现](_source/架构/秒杀系统的设计与实现.md)
+  - [秒杀系统的设计与实现[未完成]](_source/架构/秒杀系统的设计与实现.md)
+  - [总结](_source/面试题.md)
