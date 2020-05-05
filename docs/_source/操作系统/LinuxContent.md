@@ -1,11 +1,20 @@
 ## Linux
 
-### 原理
+### 理论
+
+**Linux概览：**
 
 - [从BIOS到bootloader](_source/操作系统/从BIOS到bootloader.md)
 - [从QQ的启动认识Linux](_source/操作系统/从QQ的启动认识Linux.md)
+
+**系统调用：**
+
 - [学会几个系统调用](_source/操作系统/学会几个系统调用.md)
 - [glibc对系统调用的封装](_source/操作系统/glibc对系统调用的封装.md)
+
+**进程：**
+
+- [从代码到进程](_source/操作系统/从代码到进程.md)
 
 ### 应用
 
