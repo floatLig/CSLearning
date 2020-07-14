@@ -69,6 +69,10 @@
   - [Redis入门](_source/中间件/Redis.md)
   - [Redis思考](_source/中间件/Redis面试.md)
 
+### 设计模式
+
+  - [设计模式](_source/架构/设计模式.md)
+
 ### 面试
 
   - [秒杀系统的设计与实现[未完成]](_source/架构/秒杀系统的设计与实现.md)
