@@ -318,12 +318,16 @@ public static void main(String[] args) {
     //2.根据ID获取bean对象
     IAccountService accountService = (IAccountService) applicationContext.getBean("accountService");
     IAccountService accountService1 = (IAccountService) applicationContext.getBean("accountService");
+
     IAccountDao accountDao = (IAccountDao) applicationContext.getBean("accountDao");
     IAccountDao accountDao1 = (IAccountDao) applicationContext.getBean("accountDao");
+
     System.out.println(accountService);
     System.out.println(accountService1);
+
     System.out.println(accountDao);
     System.out.println(accountDao1);
+    
     accountDao.saveAccount();
 
     applicationContext.close();
