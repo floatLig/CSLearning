@@ -208,6 +208,7 @@
 - [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 - [23. 合并K个排序链表](_source/算法/23.合并K个排序链表.md)
 - [128. 最长连续序列](_source/算法/128.最长连续序列.md)
+- [300. 最长上升子序列](_source/算法/300.最长上升子序列.md)
 
 ## 四、多线程
 
