@@ -1,15 +1,14 @@
 
 ## ✏️ 算法
 
-**原理：**
-
-  - [Java中关于数据结构的API](_source/算法/content-JavaApi.md.md)
-  - [数据结构与算法](_source/算法/content-algorithm.md)
-  - [一点儿小笔记](_source/算法/ThinkingSummary.md)
-
 **算法题:**
 
   - [算法题练习](_source/算法/content-算法题.md)
+
+**其他：**
+
+  - [一点儿小思考](_source/算法/ThinkingSummary.md)
+  - [其他的小笔记](_source/算法/content-algorithm.md)
 
 ## ☁️ 计算机网络
 
