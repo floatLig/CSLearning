@@ -30,6 +30,7 @@
 
 1. `二分法使用 labuladong 的模板`
 2. `夹逼使用 weiwei 的 循环不变量`
+3. `滑动窗口`：left闭，right开，外层while（right移动），内层while（left移动）
 
 **在懵逼的时候**：
 
