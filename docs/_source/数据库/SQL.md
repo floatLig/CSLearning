@@ -203,15 +203,118 @@ CREATE TABLE CustCopy AS
 SELECT * FROM Customers;
 ```
 
-区分：
+## 注意
 
 1. [left outer join, right outer join, inner outer join 区别](https://www.jianshu.com/p/e7e6ce1200a4)
 
-## [182\. 查找重复的电子邮箱](https://leetcode-cn.com/problems/duplicate-emails/)
+2. 字符串、data 需要用 `'`括起来
 
-Difficulty: **简单**
+3. data的默认格式为 'YYYY-MM-DD'，[如果需要更改格式，应该写成str_to_date('07-25-2012','%m-%d-%Y')](https://stackoverflow.com/questions/11641096/error-while-inserting-date-incorrect-date-value)
 
-### 题目描述
+4. `LIMIT 1` 写在最后面
+
+```sql
+SELECT emp_no, salary
+FROM salaries
+GROUP BY emp_no
+ORDER BY salary DESC
+LIMIT 1;
+```
+
+5. 前面用 AS 重命名的值，可以在后面使用
+
+```java
+// 注意 t 
+SELECT emp_no, COUNT(emp_no) AS t
+FROM salaries
+GROUP BY emp_no
+HAVING t > 15;
+```
+
+6. 效率：
+   - 对于 mysql，不推荐使用子查询和 join 是因为本身 join 的效率就是硬伤，一旦数据量很大效率就很难保证，强烈推荐分别根据索引单表取数据，然后在程序里面做 join，merge 数据。
+   - 子查询就更别用了，效率太差，执行子查询时，MYSQL 需要创建临时表，查询完毕后再删除这些临时表，所以，子查询的速度会受到一定的影响，这里多了一个创建和销毁临时表的过程。
+   - 如果是 JOIN 的话，它是走嵌套查询的。小表驱动大表，且通过索引字段进行关联。如果表记录比较少的话，还是 OK 的。大的话业务逻辑中可以控制处理。
+
+
+
+
+
+将行变成列
+
+join 后一定要跟 ON
+
+```sql
+1、查询“01”课程比“02”课程成绩高的所有学生的学号；
+
+select distinct t1.sid as sid
+from 
+    (select * from sc where cid='01')t1
+left join 
+    (select * from sc where cid='02')t2
+on t1.sid=t2.sid
+where t1.score>t2.scor
+```
+
+
+
+AVG 后只能用 GROUP BY
+
+```sql
+2、查询平均成绩大于60分的同学的学号和平均成绩；
+
+SELECT t1.sid, AVG(t1.score)
+FROM sc AS t1
+GROUP BY t1.sid
+HAVING AVG(t1.score) > 60;
+```
+
+
+
+SELECT 的 COUNT 可以起别名 
+
+--尽量用 别名--
+
+```sql
+select
+    count(distinct tid) as teacher_cnt
+from teacher
+where tname like '李%'
+
+SELECT COUNT(DISTINCT t.tid) AS teacher_cnt
+FROM teacher AS t
+WHERE t.tname LIKE '李%';
+```
+
+
+
+多表连接，可以接多个 JOIN
+
+```sql
+5、查询没学过“张三”老师课的同学的学号、姓名；
+
+SELECT s.sid, s.sname
+FROM student AS s
+WHERE s.sid NOT IN
+	(SELECT sc.sid
+	FROM sc LEFT JOIN course
+	ON sc.cid = course.cid
+	LEFT JOIN teacher
+	ON course.tid = teacher.tid
+	WHERE teacher.tname = '张三'
+	);
+```
+
+
+
+
+
+
+## 题目
+
+
+
+### [182\. 查找重复的电子邮箱](https://leetcode-cn.com/problems/duplicate-emails/)
 
 **SQL架构：**
 
