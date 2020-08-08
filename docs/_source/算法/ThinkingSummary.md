@@ -1,14 +1,68 @@
-# 思考总结
+## 思路
 
-## 误区
+全排列 +  组合
 
-做算法的最大误区是只做一遍。
+1. 联想递归树 + 递归树的每一层是 第 i 个元素 + 后面的元素可选择的数，构成了 分支
+2. 每一层 用递归 + 可选择 使用 for （for 里面使用剪枝）
+3. 因为需要回退的数字只有一位，所以适合使用 stack
 
-## 怎么做
 
-1. 经典算法每道题至少做5遍
-2. 做leetcode要更关注时间，而非内存
-3. 做完题后要反馈（解题，国际站解题）
+
+给一堆（最多15）有价值的东西，均分给2个人，均分不了的，扔掉，求最小扔掉多少
+
+1. 以 东西 去角度去想
+
+2. 一个东西，可以分给 第一个人，或者 分给 第二个人， 或者选择 丢掉
+
+3. 也是类似全排列、组合的思想，利用 回溯 + 剪枝
+
+   ```java
+   // 核心的 回溯 + 剪枝
+   
+   // 目标值
+   private int minRes = Integer.MAX_VALUE;
+   // 剪枝， maxPoint = sum / 2;
+   private int maxPoint = Integer.MIN_VALUE;
+   
+   private void recur(int[] nums, int floor, int sum1, int sum2, int sum3) {
+           if (floor == nums.length) {
+               if (sum1 == sum2) {
+                   minRes = Math.min(minRes, sum3);
+               }
+               return;
+           }
+   
+           // 一开始是写成 多个 for， 其实没有跟 i 扯上关系的话，直接多个递归就就可以了
+           // for (int i = 1; i <= 3; i++) {
+               // if (i == 1 && sum1 < maxPoint) {
+               //     sum1 += nums[floor];
+               //     recur(nums, floor + 1, sum1, sum2, sum3);
+               //     sum1 -= nums[floor];
+               // } else if (i == 2 && sum2 < maxPoint) {
+               //     sum2 += nums[floor];
+               //     recur(nums, floor + 1, sum1, sum2, sum3);
+               //     sum2 -= nums[floor];
+               // } else if (i == 3 && sum3 < maxPoint) {
+               //     sum3 += nums[floor];
+               //     recur(nums, floor + 1, sum1, sum2, sum3);
+               //     sum3 -= nums[floor];
+               // }
+           // }
+   
+           // 剪枝
+           if (sum1 < maxPoint) {
+               recur(nums, floor + 1, sum1 + nums[floor], sum2, sum3);
+           }
+           if (sum2 < maxPoint) {
+               recur(nums, floor + 1, sum1, sum2 + nums[floor], sum3);
+           }
+           if (sum3 < maxPoint) {
+               recur(nums, floor + 1, sum1, sum2,sum3 + nums[floor]);
+           }
+       }
+   ```
+
+   
 
 ## 方法和经验总结✨
 
@@ -370,3 +424,17 @@ return dp[XX];
 ### 8. 夹逼--循环不变量
 
 - [75. 颜色分类](_source/算法/75.颜色分类.md)
+
+
+
+
+
+## 误区
+
+做算法的最大误区是只做一遍。
+
+## 怎么做
+
+1. 经典算法每道题至少做5遍
+2. 做leetcode要更关注时间，而非内存
+3. 做完题后要反馈（解题，国际站解题）
