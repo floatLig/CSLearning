@@ -523,6 +523,229 @@
 
 
 
+##### 判断数组是不是二叉搜索树的后序遍历
+
+1. 二叉搜索树是：左右中。 
+2. 最后一个元素是二叉搜索树的根节点；找到第一个大于根节点的值，如果后面的值出现`小于`根节点的值，那么返回false。
+3. 进行递归
+
+---
+
+
+
+##### 栈的压入顺序、弹出顺序
+
+1. 利用一个栈，用 while 判断是否需要弹出
+
+---
+
+
+
+##### 贝壳：修改多少个元素可以变成回文子串
+
+1. 用双指针 left, right ，如果 `chars[left] != chars[right]  res++`
+
+---
+
+
+
+##### 贝壳：M * N的网格涂颜色，相邻的网格的颜色不能一样，颜色的个数要相同，问需要多少个颜色
+
+1. 还是想象不同的用例，看看解题关键点在哪里
+
+2. 贪心，如果 两个数有一个是偶数，那么就是2，
+
+   如果两个都是奇数，那么就找最小因子。（分隔到每一小块，颜色的个数还是相同的）
+   比如9 7，输出 3，因为3*3=9
+   如果是5 7，输出 5，
+   如果是9 25，输出 3（3比5小）
+
+---
+
+
+
+##### 贝壳：找到一个区间，该区间的所有数`相与` 与 全部的数`相与`的结果target一样，求这个区间最小值范围
+
+1. 利用 滑动窗口
+2. left固定，看看 right 需要到达哪里才能获得 target的值，用 min 记录最小的值 
+3. left++
+4. 但是，当right == len的时候，还是不能和 target 相等，那么，后面就不用再看了，因为后面也不可能再相等了。(剪枝)
+
+---
+
+
+
+##### 最小生成树
+
+1. 普里姆算法（Prim）：以某顶点为起点，逐步找各顶点上的最小权值的边来构造最小生成树的。
+
+2. 维护一个 `lowcost数组` 和 `adjvex数组`， lowcost 代表 现有的生成树，和其他点的连接，最小需要花费多少cost。假设 adjvex[`3`] =` 5`, lowcost[3] = `10`, 代表该生成树 如果想要将 3 纳入 生成树的范围，最小的边是 5 和 3 之间的边，最小花费是10
+
+3. Prim算法，维护一个 lowcost数组 和 adjvex数组。`从 lowcost 中 找到花费最小的 边，纳入生成树的范围后，更新 lowcost 和 adjvex。`该过程维护 n - 1次，因为每一次能找到一个点纳入生成树中。`lowcost[i] == 0 代表 i 点是最小生成树中的点，直接跳过`
+
+4. Prim 算法的时间复杂度是 O(n ^ 2)
+
+   ![image-20200812102834767](_img/image-20200812102834767.png)
+
+   ![image-20200812102841385](_img/image-20200812102841385.png)
+
+   ```powershell
+   控制台输入的参数：
+   9 14
+   0 1 10
+   0 5 11
+   1 2 18
+   1 6 16
+   1 8 12
+   2 3 22
+   2 8 8
+   3 4 20
+   3 7 16
+   3 8 21
+   4 5 26
+   4 7 7
+   5 6 17
+   6 7 19
+   ```
+
+   ```java
+   private void mimiSpanTree_Prim() {
+       Scanner scanner = new Scanner(System.in);
+       int n = scanner.nextInt();
+       int[][] graph = new int[n][n];
+       for (int i = 0; i < n; i++) {
+           for (int j = 0; j < n; j++) {
+               if (i == j) graph[i][j] = 0;
+               else graph[i][j] = Integer.MAX_VALUE;
+           }
+       }
+   
+       int m = scanner.nextInt();
+       for (int i = 0; i < m; i++) {
+           int vertex1 = scanner.nextInt();
+           int vertex2 = scanner.nextInt();
+           int cost = scanner.nextInt();
+           graph[vertex1][vertex2] = cost;
+           graph[vertex2][vertex1] = cost;
+       }
+       int[] adjacentVertex = new int[n];
+       int[] lowCost = new int[n];
+       // 先把 第 0 点加入最小生成树
+       for (int i = 0; i < n; i++) {
+           lowCost[i] = graph[0][i];
+       }
+       // 置为0代表加入最小生成树
+       lowCost[0] = 0;
+   
+       int res = 0;
+       
+       // i 只是控制次数，循环里面不会用到 i 的，不要写错了
+       for (int i = 1; i < n; i++) {
+           int min = Integer.MAX_VALUE;
+           int point = 0;
+   
+           for (int j = 0; j < lowCost.length; j++) {
+               // 注意里面都是 lowCost[j]，不要写成 i 了
+               if (lowCost[j] != 0 && lowCost[j] < min) {
+                   min = lowCost[j];
+                   point = j;
+               }
+           }
+           System.out.println("添加：" + "点" + adjacentVertex[i] + "和 点" + point + " 之间的边：" + min);
+           res += min;
+           // 更新 lowCost
+           for (int j = 0; j < lowCost.length; j++) {
+               if (lowCost[j] != 0 && lowCost[j] > graph[point][j]) {
+                   lowCost[j] = graph[point][j];
+                   adjacentVertex[j] = j;
+               }
+           }
+       }
+       System.out.println("最小生成树花费的cost为" + res);
+   }
+   ```
+
+
+
+1. 克鲁斯卡尔（Kruskal）算法：将边按照权值从低到高排序。通过 `parent[]`判断有没有环，看看是否要将这个边加入到最小生成树中
+
+2. 首先将 edge 按照 weight权重进行排序，再通过parent[] 判断是否要添加这条边（更新 parent[]）
+
+   ![image-20200812115738290](_img/image-20200812115738290.png)
+
+   ```powershell
+   控制台输入的参数：
+   9 14
+   0 1 10
+   0 5 11
+   1 2 18
+   1 6 16
+   1 8 12
+   2 3 22
+   2 8 8
+   3 4 20
+   3 7 16
+   3 8 21
+   4 5 26
+   4 7 7
+   5 6 17
+   6 7 19
+   ```
+
+   ```java
+   private void mimiSpanTree_Prim() {
+           Scanner scanner = new Scanner(System.in);
+           int n = scanner.nextInt();
+           int[][] graph = new int[n][n];
+           for (int i = 0; i < n; i++) {
+               for (int j = 0; j < n; j++) {
+                   if (i == j) graph[i][j] = 0;
+                   else graph[i][j] = Integer.MAX_VALUE;
+               }
+           }
+   
+           int m = scanner.nextInt();
+           Edge[] edges = new Edge[m];
+           for (int i = 0; i < m; i++) {
+               int vertex1 = scanner.nextInt();
+               int vertex2 = scanner.nextInt();
+               int cost = scanner.nextInt();
+   
+               Edge edge = new Edge(vertex1, vertex2, cost);
+               edges[i] = edge;
+           }
+   
+           Arrays.sort(edges, (o1, o2) -> o1.weight - o2.weight);
+   
+           int[] parent = new int[n];
+           int res = 0;
+           for (Edge edge : edges) {
+               int p1 = find(parent, edge.begin);
+               int p2 = find(parent, edge.end);
+               // 如果父节点不相等，说明不在同一棵树里面，更新 parent[]
+               // 如果相等，就什么都不做
+               if (p1 != p2) {
+                   res += edge.weight;
+                   System.out.println("点" + edge.begin + " 点" + edge.end + " -> " + edge.weight);
+                   parent[p1] = p2;
+               }
+           }
+           System.out.println("最小生成树花费" + res);
+       }
+   
+       private int find(int[] parent, int value) {
+           // 等于0，这个点是父节点
+           while (parent[value] != 0) {
+               value = parent[value];
+           }
+           return value;
+       }
+   ```
+
+   
+
+
+
 
 
 ## 有意思的代码
