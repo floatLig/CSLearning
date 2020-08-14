@@ -147,7 +147,7 @@
 
 ##### 删除排序链表中重复的数组
 
-1.  point 指针指向的值 value, 查找下一个节点，和 value 的值不一样
+1. point 指针指向的值 value, 查找下一个节点，和 value 的值不一样
 2. 进行整体的移动
 
 ---
@@ -423,7 +423,7 @@
 
 ##### 最长回文子序列
 
-1. 也是动态规划，也是 二维dp， ` if (chars[i] == chars[j]) chars[i][j] ==chars[i + 1][j - 1]`得到长度，子串则是判断 `boolean`
+1. 也是动态规划，也是 二维dp， `if (chars[i] == chars[j]) chars[i][j] ==chars[i + 1][j - 1]`得到长度，子串则是判断 `boolean`
 2. 这种题也可以看看递归怎么写，应该挺有帮助的，[看看状态转移方程怎么写]([https://floatlig.gitee.io/javalearning/#/_source/%E7%AE%97%E6%B3%95/516.%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97](https://floatlig.gitee.io/javalearning/#/_source/算法/516.最长回文子序列))
 
 ---
@@ -579,7 +579,7 @@
 
 1. 普里姆算法（Prim）：以某顶点为起点，逐步找各顶点上的最小权值的边来构造最小生成树的。
 
-2. 维护一个 `lowcost数组` 和 `adjvex数组`， lowcost 代表 现有的生成树，和其他点的连接，最小需要花费多少cost。假设 adjvex[`3`] =` 5`, lowcost[3] = `10`, 代表该生成树 如果想要将 3 纳入 生成树的范围，最小的边是 5 和 3 之间的边，最小花费是10
+2. 维护一个 `lowcost数组` 和 `adjvex数组`， lowcost 代表 现有的生成树，和其他点的连接，最小需要花费多少cost。假设 adjvex[`3`] =`5`, lowcost[3] = `10`, 代表该生成树 如果想要将 3 纳入 生成树的范围，最小的边是 5 和 3 之间的边，最小花费是10
 
 3. Prim算法，维护一个 lowcost数组 和 adjvex数组。`从 lowcost 中 找到花费最小的 边，纳入生成树的范围后，更新 lowcost 和 adjvex。`该过程维护 n - 1次，因为每一次能找到一个点纳入生成树中。`lowcost[i] == 0 代表 i 点是最小生成树中的点，直接跳过`
 
@@ -759,7 +759,7 @@
    ArrayList<String> setList = new ArrayList<>(stack);
    ````
 
-2. 
+2. `StringBuilder` -> `length()`,  `append()`, `deleteCharAt()`
 
 ## 方法和经验总结✨
 
