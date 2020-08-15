@@ -744,7 +744,21 @@
 
    
 
+##### 下一个排序
 
+1. 数组的值为：X X X **小** 大 中 小，找到这个**小**。
+2. 下一个排序，将大于 **小**的最小值找出来交换位置， X X X **中** 大 **小** 小，
+3. 反转 X X X **中** 小 **小** 大
+
+---
+
+
+
+##### 最长有效括号
+
+1. leftBrackets, rightBrackets, length，当`rightBrackets > leftBrackets时，length 清空`，当`rightBrackets == leftBrackets时，更新length`。 向左遍历一遍，向右遍历一遍
+2. --分割线--
+3. 动态规划。dp[i] = 2 + dp[i - 1] + dp[i - dp[i - 1] - 1]
 
 
 
