@@ -237,6 +237,29 @@
 
 1. kmp算法，对 "ll"求 next数组
 
+
+
+- **相同的前缀和后缀**
+
+![image-20200815151727151](_img/image-20200815151727151.png)
+
+```java
+// getNext数组中
+
+int j = -1, i = 0;
+// 这里要记得是 len - 1，否则会数组越界
+while (i < len - 1) {
+    if (j == -1 || s.toCharArray(i) == s.toCharArray(j)) {
+        // 如果s.toCharArray(i) = s.toCharArray(j)，那么next[i+1] = j+1，此时表示s.toCharArray(i + 1)之前的子串中，存在长度为j+1的相同前后缀
+        i++;
+        j++;
+        next[i] = j;
+    }
+}
+```
+
+
+
 ---
 
 
@@ -348,7 +371,7 @@
 ##### 柱状图中最大的矩形
 
 1. 以列求，双指针扩散
-2. 单调栈。`单调栈 pop() 出来的值，和 现在的 peek()的值息息相关`
+2. 单调栈。`单调栈 pop() 出来的值，和 现在的 peek()的值息息相关，pop()作为高度，peek()作为长度`
 
 ---
 
@@ -414,8 +437,30 @@
 ##### 最长增长子序列的个数
 
 1. dp：length[] 记录 到这个元素位置，最长的长度是多少。
+
 2. dp：count[] 记录 到这个元素位置，最长的元素的个数是多少。
+
 3. 在计算 length的时候，一起计算 dp
+
+   ```java
+   for (int i = 0; i < len; i++) {
+       for (int j = 0; j < i; j++) {
+           if (nums[i] > nums[j]) {
+               if (dp[j] + 1 > dp[i]) {
+                   dp[i] = dp[j] + 1;
+                   count[i] = count[j];
+               } else if (dp[j] + 1 == dp[i]) {
+                   count[i] += count[j];
+               }
+           }
+           //print(dp, count);
+       }
+       //找出最长递增子序列的长度是多少
+       max = Math.max(max, dp[i]);
+   }
+   ```
+
+   
 
 ---
 
@@ -518,7 +563,7 @@
 
 1. 使用HashSet作为最后的res， for 中两个HashMap 比对看看能否继续，使用 ArrayList存储路径，但是这样子时间复杂度很高
 2. --分界线--
-3. 先排序 + 判断是否访问过的数组 userd + StringBuilder + ArrayList
+3. 先排序 + 判断是否访问过的数组 `used` + StringBuilder + ArrayList
 4. 如果说遇到 `chars[i - 1] == chars[i] && !userd[i - 1]` 剪枝
 
 
@@ -759,6 +804,14 @@
 1. leftBrackets, rightBrackets, length，当`rightBrackets > leftBrackets时，length 清空`，当`rightBrackets == leftBrackets时，更新length`。 向左遍历一遍，向右遍历一遍
 2. --分割线--
 3. 动态规划。dp[i] = 2 + dp[i - 1] + dp[i - dp[i - 1] - 1]
+
+
+
+##### 计数质数
+
+1. 利用 6，质数一定 `n % 6 == 1 || n % 6 == 5`
+2. --分割线--
+3. 填充表格，进行筛选，如果这个数是 3 的倍数，那么一定不可能是 质数...
 
 
 
