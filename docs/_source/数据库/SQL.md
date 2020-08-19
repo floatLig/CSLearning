@@ -223,7 +223,7 @@ LIMIT 1;
 
 5. 前面用 AS 重命名的值，可以在后面使用
 
-```java
+```mysql
 // 注意 t 
 SELECT emp_no, COUNT(emp_no) AS t
 FROM salaries
@@ -303,6 +303,27 @@ WHERE s.sid NOT IN
 	ON course.tid = teacher.tid
 	WHERE teacher.tname = '张三'
 	);
+```
+
+
+
+Student(S#,Sname,Sage,Ssex) 学生表，
+
+Course(C#,Cname,T#) 课程表，
+
+SC(S#,C#,score) 成绩表，
+
+Teacher(T#,Tname) 教师表 。
+
+查询学过“001”并且也学过编号“002”课程的同学的学号、姓名。
+
+```sql
+select Student.S#,Student.Sname
+from Student,SC
+where Student.S#=SC.S# and SC.C#=’001′and
+exists(Select *
+        from SC as SC_2
+        where SC_2.S#=SC.S# and SC_2.C#=’002′);
 ```
 
 
