@@ -471,7 +471,7 @@ ConcurrentHashMap
 
 
 
-创建线程的的方式，还有线程池
+创建线程的的方式，还有线程池（`Executors.newFixedThreadPool`）
 
 ---
 
@@ -497,3 +497,96 @@ OOM
 
 
 
+DNS端口
+
+HTTP端口
+
+HTTPS端口
+
+---
+
+
+
+DNS原理和步骤？
+
+顶级域名服务器、根据名服务器、权限域名服务器
+
+---
+
+
+
+消息队列的优点？
+
+![图片](_img/图片.png)
+
+![图片](_img/图片-1597901478289.png)
+
+![图片](_img/图片-1597901503519.png)
+
+---
+
+
+
+HTTP 1.1: 长连接、流水线
+
+HTTP 2.0: 二进制分层、服务端推送、首部压缩
+
+---
+
+
+
+Hash的原理：链表、开放地址法
+
+---
+
+
+
+虚拟内存，页面置换算法
+
+
+
+```java
+class Singleton {
+    private static volatile Singleton instance;
+    private Singleton() {}
+    
+    public static Singleton() {
+        if (instance == null) {
+            synchroniezd(Singleton.class) {
+                if (instance == null) {
+                    intance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+---
+
+
+
+BIO：同步阻塞
+
+NIO：同步非阻塞
+
+AIO：异步非阻塞
+
+- A顾客去吃海底捞，就这样干坐着等了一小时，然后才开始吃火锅。(BIO)
+
+- B顾客去吃海底捞，他一看要等挺久，于是去逛商场，每次逛一会就跑回来看有没有排到他。于是他最后既购了物，又吃上海底捞了。（NIO）
+
+- C顾客去吃海底捞，由于他是高级会员，所以店长说，你去商场随便玩吧，等下有位置，我立马打电话给你。于是C顾客不用干坐着等，也不用每过一会儿就跑回来看有没有等到，最后也吃上了海底捞（AIO）
+
+---
+
+
+
+大多数Java虚拟机采用的 1:1 线程模型（映射到核心级线程）
+
+---
+
+
+
+du -ah 查看当前磁盘
