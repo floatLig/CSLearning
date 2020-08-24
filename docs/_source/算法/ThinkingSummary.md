@@ -815,6 +815,245 @@ while (i < len - 1) {
 
 
 
+##### 最大公因子
+
+```java
+// greatest common divisor  
+// 辗转相除法
+private int gcd(int a, int b)  {
+    // b a b a b
+    return b == 0 ? a : gcd(b, a % b);
+}
+```
+
+##### 最小公倍数
+
+```java
+// least common multiple
+private int lcm(int a, int b) {
+    // a b a b
+    return a * b / gcd(a, b);
+}
+```
+
+
+
+##### 米哈游，模拟 分数加减乘除
+
+1. 要多考虑测试用例的特殊情况，包括输出
+
+```java
+	private void solution() {
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
+        String[] strs = str.split(" ");
+        long n1 = Integer.parseInt(strs[0].split("/")[0]);
+        long n2 = Integer.parseInt(strs[0].split("/")[1]);
+        long n3 = Integer.parseInt(strs[2].split("/")[0]);
+        long n4 = Integer.parseInt(strs[2].split("/")[1]);
+
+        // 最小公倍数
+        long parent = lcm(n2, n4);
+        n1 = parent / n2 * n1;
+        n3 = parent / n4 * n3;
+
+        long son = 0;
+
+        if ("+".equals(strs[1])) {
+            son = n1 + n3;
+        } else if ("-".equals(strs[1])) {
+            son = n1 - n3;
+        } else if ("*".equals(strs[1])) {
+            son = n1 * n3;
+            parent = parent * parent;
+        }
+
+        // 最大公因数
+        long d = gcd(parent, son);
+        parent /= d;
+        son /= d;
+
+        // ！！！！！注意测试的输出！！！！！
+        if (parent == son) {
+            // son / parent = 1
+            System.out.println("1");
+        } else if (parent == 1) {
+            // son / parent = son
+            System.out.println(son);
+        }else {
+            System.out.println(son + "/" + parent);
+        }
+    }
+
+    private long lcm(long a, long b) {
+        return a * b / gcd(a, b);
+    }
+    private long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+```
+
+##### 米哈游 取出多行，这多行的1能恰好能在每个位置都只有一个1
+
+![image-20200822083807415](_img/image-20200822083807415.png)
+
+1. 第一行可以取或者不取
+
+2. 注意数组的递归中不受其他递归层次的影响，需要重新开辟空间并赋值`System.arraycopy(nums, 0, temp, 0, nums.length)`
+
+   ```java
+   	private int m = 0;
+       private int n = 0;
+       private boolean flag = false;
+       private void solution() {
+           Scanner scanner = new Scanner(System.in);
+           m = scanner.nextInt();
+           n = scanner.nextInt();
+           int[][] grid = new int[m][n];
+           for (int i = 0; i < m; i++) {
+               for (int j = 0; j < n; j++) {
+                   grid[i][j] = scanner.nextInt();
+               }
+           }
+           recur(grid, 0, new int[n]);
+           System.out.println(flag);
+       }
+   
+       private void recur(int[][] grid, int index, int[] nums) {
+           if (flag) return;
+           if (index == m) {
+               // 遍历nums,如果全都为0，则为true,否则为false
+               for (int i = 0; i < nums.length; i++) {
+                   if (nums[i] == 0) break;
+                   if (i == nums.length - 1) {
+                       flag = true;
+                       break;
+                   }
+               }
+               return;
+           }
+   
+           int[] temp = new int[nums.length];
+           System.arraycopy(nums, 0, temp, 0, nums.length);
+           boolean modify = false;
+           // 选第i行
+           for (int i = 0; i < n; i++) {
+               if (grid[index][i] == 1 && temp[i] == 1) break;
+               if (grid[index][i] == 1){
+                   temp[i] = 1;
+                   modify = true;
+               }
+               if (i == n - 1 && modify) {
+                   recur(grid, index + 1, temp);
+               }
+           }
+           // 不选
+           int[] newTemp = new int[nums.length];
+           System.arraycopy(nums, 0, newTemp, 0, nums.length);
+           recur(grid, index + 1, newTemp );
+       }
+   ```
+
+
+
+```java
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String next = scanner.next();
+        scanner.close();
+        System.out.println(decode(next));
+    }
+  
+    public static String decode(String words){
+        while (words.contains("]")){
+            int right = words.indexOf("]");
+            int left = words.lastIndexOf("[", right);
+            String repeatStr = words.substring(left+1, right);
+            String[] split = repeatStr.split("\\|");
+            words = words.replace("["+repeatStr+"]",
+                    String.join("", Collections.nCopies(Integer.parseInt(split[0]), split[1])));
+        }
+        return words;
+    }
+```
+
+
+
+##### 腾讯
+
+输出描述:
+
+```
+输出一个字符串，代表解压后的字符串。
+```
+
+输入
+
+```
+HG[3|B[2|CA]]F
+```
+
+输出
+
+```
+HGBCACABCACABCACAF
+```
+
+说明
+
+```
+HG[3|B[2|CA]]F−>HG[3|BCACA]F−>HGBCACABCACABCACAF
+```
+
+```java
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        new Main().solution();
+    }
+
+    private void solution() {
+        Scanner scanner = new Scanner(System.in);
+        String words = scanner.nextLine();
+
+        // 使用一个while
+        while (words.contains("]")) {
+            // 第一个 ]
+            int right = words.indexOf(']');
+            // ] 的前一个 [
+            int left = words.lastIndexOf('[');
+            String[] split = words.substring(left + 1, right).split("\\|");
+            // replace 替换
+            // Collenctions.nCopies 复制，结果是一个数组
+            // String.join 是对数组的元素进行拼接， “” 代表直接拼接，如果是“-”，表示 a-a-a
+            words = words.replace(words.substring(left, right + 1),
+                    String.join("", Collections.nCopies(Integer.parseInt(split[0]), split[1]))));
+        }
+        System.out.println(words);
+    }
+}
+```
+
+
+
+小Q在周末的时候和他的小伙伴来到大城市逛街，一条步行街上有很多高楼，共有n座高楼排成一行。 
+
+  小Q从第一栋一直走到了最后一栋，小Q从来都没有见到这么多的楼，所以他想知道他在每栋楼的位置处能看到多少栋楼呢？（当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住） 
+
+https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
+
+1. 使用多一个数组保存数据
+
+
+
+
+
+
+
+
+
 ## 有意思的代码
 
 1. ````java
@@ -824,8 +1063,14 @@ while (i < len - 1) {
    
    ArrayList<String> stackList = new ArrayList<>(stack);
    ArrayList<String> setList = new ArrayList<>(stack);
+   
    ````
 
+// 数组复制
+   int temp = new int[nums.length];
+   System.arraycopy(nums, 0, temp, 0, nums.length);
+   ````
+   
 2. `StringBuilder` -> `length()`,  `append()`, `deleteCharAt()`
 
 ## 方法和经验总结✨
@@ -880,7 +1125,7 @@ while (i < len - 1) {
 
 双指针同向遍历：
 
-```java
+​```java
 //-1可以理解为减掉一个位置（个数）
 for(int i = 0; i < nums.length - 1; i++){
     for(int j = i + 1; j < nums.length; j++){

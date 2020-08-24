@@ -91,6 +91,11 @@
 
 1. 应届生，自学了Java和Java相关的知识，参照了网上资料 秒杀系统，springBoot，在前段时间的实习，做的项目主要是 持续集成，持续部署的项目，dockers kubernetes
 
+##### 反问
+
+1. 部门的具体业务
+2. 自己值得改进的地方
+
 ---
 
 
@@ -121,8 +126,29 @@
 1. 程序调度基本单位，多线程，Java
 2. 继承 Runnable， Callable,  继承Thread， Callable需要再封装成FutureTask，获取到运行的返回结果
 
-
 ##### 动态代理、cglib
+
+> https://apppukyptrl1086.pc.xiaoe-tech.com/detail/v_5e0cba7b5f987_rEHvwPy7/3?from=p_5dd3ccd673073_9LnpmMju&type=6
+
+其实就是动态的创建一个代理类出来，创建这个代理类的实例对象，在这个里面引用你真正自己写的类，所有的方法的调用，都是先走代理类的对象，他负责做一些代码上的增强，再去调用你写的那个类
+
+ 
+
+spring里使用aop，比如说你对一批类和他们的方法做了一个切面，定义好了要在这些类的方法里增强的代码，spring必然要对那些类生成动态代理，在动态代理中去执行你定义的一些增强代码
+
+ 
+
+如果你的类是实现了某个接口的，spring aop会使用jdk动态代理，生成一个跟你实现同样接口的一个代理类，构造一个实例对象出来，jdk动态代理，他其实是在你的类有接口的时候，就会来使用
+
+ 
+
+很多时候我们可能某个类是没有实现接口的，spring aop会改用cglib来生成动态代理，他是生成你的类的一个子类，他可以动态生成字节码，覆盖你的一些方法，在方法里加入增强的代码
+
+ 
+
+
+
+---
 
 
 ###### 1. 代理机制的介绍
@@ -485,6 +511,8 @@ OOM
 
 垃圾收集器
 
+ZGC：多重映射 染色指针，如果标志位更新了，那么就直接从重分配集中去查找。自愈
+
 ---
 
 
@@ -529,7 +557,7 @@ DNS原理和步骤？
 
 HTTP 1.1: 长连接、流水线
 
-HTTP 2.0: 二进制分层、服务端推送、首部压缩
+HTTP 2.0: 二进制分层、首部压缩、服务端推送
 
 ---
 
@@ -589,4 +617,338 @@ AIO：异步非阻塞
 
 
 
-du -ah 查看当前磁盘
+du -ah 查看当前磁盘 （Disk Used）
+
+df -h (Disk Free)
+
+| -a   | 显示目录中所有文件大小 |
+| ---- | ---------------------- |
+| -k   | 以KB为单位显示文件大小 |
+| -m   | 以MB为单位显示文件大小 |
+| -g   | 以GB为单位显示文件大小 |
+| -h   | 以易读方式显示文件大小 |
+| -s   | 仅显示总计             |
+
+---
+
+
+
+io多路复用：
+
+1. 通过一种机制，让一个进程监听多个套接字(非阻塞异步)
+2. 系统调用
+
+---
+
+
+
+> 记录防止忘记： 服务器的带宽很重要， 1Mbps 和 20Mbs  QPS差距很大
+>
+> ![image-20200822193955159](_img/image-20200822193955159.png)
+
+
+
+nginx:
+
+nginx面试题：https://juejin.im/post/6844904125784653837
+
+nginx高性能的原因：https://blog.csdn.net/yin__ren/article/details/93619025 1. io多路复用， 2. master-worker进程模型 3. 协程机制
+
+
+
+![image-20200822193817334](_img/image-20200822193817334.png)
+
+nginx做静态资源服务器
+
+server模块下的location
+
+![image-20200822193455585](_img/image-20200822193455585.png)
+
+nginx负载均衡
+
+配置`upstream`并选择负载均衡策略
+
+![image-20200822193805440](_img/image-20200822193805440.png)
+
+分布式session
+
+**解决方案：**
+
+- 使用cookie来完成（很明显这种不安全的操作并不可靠）
+- 使用Nginx中的ip绑定策略，同一个ip只能在指定的同一个机器访问（不支持负载均衡）
+- 利用数据库同步session（效率不高）
+- 使用tomcat内置的session同步（同步可能会产生延迟）
+- 使用token代替session
+- **我们使用spring-session以及集成好的解决方案，存放在redis中**
+
+作者：java高级架构41397
+链接：https://juejin.im/post/6844903740479160334
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+![08115315_KJKw.jpg](https://static.oschina.net/uploads/img/201805/08115315_KJKw.jpg)
+
+##### 架构
+
+![image-20200824165846212](_img/image-20200824165846212.png)
+
+秒杀系统：
+
+请求量从 1w/s 到 10 w/s，架构改造：
+
+1. 将秒杀系统模块独立出来，对这个系统做针对性的优化
+2. 服务器集群也独立出来，这样大流量不会影响到其他商品
+3. 添加redis
+4. 秒杀答题
+
+请求量从10w/s 到 100w/s，架构改造：
+
+1. 动静分离，使用CDN，把页面刷新页面传送的数据减少到最小
+
+
+
+##### 怎么保证缓存的数据和Mysql的数据的一致性。CAP理论
+
+1. 在分布式系统中，C 一致性 A 可用性 P 分区容忍性（多个服务器的时候，通信延迟是存在）
+2. P是通信延迟，一般来讲，这个是存在的，所以我们只能从 C 和 A中做出权衡
+3. 选择了 C 一致性的话，修改的时候，多个服务器就要同时被锁定，失去了 A
+4. 选择了 A 可用性的锁，多个服务器肯定不能被锁定，所以失去了 C
+
+##### BASE理论：
+
+1. BA 基本可用性， S 软状态 E 最终一致性
+2. BASE理论是 一致性 和 可用性做出的权衡，即，不强制存在强一致性，我们只保证最终一致性
+
+
+
+秒杀系统就是有大量的读请求和写请求
+
+1. 写请求的瓶颈一般是存储层，利用CAP利用，做出权衡
+2. 读请求
+
+##### 热点数据：分为静态热点数据、动态热点数据。
+
+1. 静态热点数据就是能够提前预测的数据，可以通过买家报名的方式，提前对热点数据打上标签。`做预热`
+2. 动态热点数据就不能提前预测，比如抖音上突然某种产品火了，这里就只能做限流处理，进行保护。也需要发现动态热点数据。可以分析各个环节中间件的热点key，比如 Nginx的热点URL(https://www.jianshu.com/p/537a0bddda94)
+
+
+
+##### 削峰的本质是延迟对请求的处理，让服务器处理的更加平滑。有几种方式：
+
+1. 无损操作（不会丢弃用户的请求）：
+   1. 排队： 消息队列，线程池加锁等待，先进先出的内存排队算法，把请求序列话到文件中，然后再顺序的读取
+   2. 答题：答题的图片也可以做成CDN
+   3. 分层过滤：对读数据不做强一致校验，根据CAP，因为这样子会造成性能瓶颈。限流保护
+2. 有损操作：限流
+
+
+
+尽量将不影响性能的检查条件提前，如用户是否具有秒杀资格、商品状态是否正常、用户答题是否正确、秒杀是否已经结束、是否非法请求、营销等价物是否充足等；
+
+##### 检查的条件包括：
+
+1. 用户是否存在
+2. 秒杀答题对不对
+3. 是否拿到了令牌
+4. 秒杀是否已经结束
+5. 秒杀的商品是否是否在内存中
+
+
+
+服务器端的性能一般和QPS相关。
+
+总 QPS =（1000ms / `响应时间`）× `线程数量`
+
+对大部分的Web系统来说，响应时间一般是由CPU执行时间和等待时间（RPC、IO、Sleep、Wait）组成的。
+
+在实际情况下，等待时间对QPS的影响不大，因为等待的时间，其他线程也会有CPU，这点就可以弥补。对QPS影响真正大的是，CPU的执行时间。
+
+如果`减少CPU的执行时间`，就可以增加一倍的QPS。
+
+在多线程的场景下，`线程数 = 2 * CPU核数 + 1`。当然，最好的办法是通过性能测试来发现最佳的线程数。
+
+
+
+CPU的利用率不高，是否有太多的锁？
+
+
+
+##### 如何发现瓶颈， 并提升
+
+1. 对服务器而言，出现瓶颈会有很多地方，IO、内存、CPU。在秒杀场景中，瓶颈更多是在CPU上。
+2. 如何解决CPU瓶颈呢？ 利用CPU诊断工具发现CPU的消耗，最常用的有JProfiler 和 Yourkit 这两个工具。看看哪个函数执行时间最长，然后做定制优化。
+
+![image-20200824171135887](_img/image-20200824171135887.png)
+
+还可从考虑从以下方面进行调整：【垂直扩展】
+
+1. 提升硬件条件：CPU核数、主频、内存、磁盘I/O、SSD、网卡等
+2.  JVM性能调优
+3. 缓存
+
+
+
+##### 如果用户买后不付款，怎么确保不少买
+
+1. 在Redis中，将订单id放到一个Set中
+2. 30分钟后流量没有那么多了，每隔1分钟查一下Set的容量，根据Set容量重新设置库存
+
+
+
+##### 为什么要设置令牌的数量？
+
+1. 是库存的3倍，或者5倍。因为太多后面也抢不到
+2. 而且，如果说秒杀的商品有几万件，比如牛奶，那太多的令牌会占用服务端资源
+
+
+
+预扣库存方案中如何确保十分钟后库存自动解冻？定时任务还是会有延迟吧？
+
+自动解冻可以在应用程序中设置一个定时器来定时扫描数据库的下单时间，来比较是否已经超时延时一点问题也不大，因为超时时间也是人为主观设置的
+
+```java
+	@Override
+    public String generateSecondKillToken(Integer promoId,Integer itemId,Integer userId) {
+
+        //判断是否库存已售罄，若对应的售罄key存在，则直接返回下单失败
+        if(redisTemplate.hasKey("promo_item_stock_invalid_"+itemId)){
+            return null;
+        }
+        PromoDO promoDO = promoDOMapper.selectByPrimaryKey(promoId);
+
+        //dataobject->model
+        PromoModel promoModel = convertFromDataObject(promoDO);
+        if(promoModel == null){
+            return null;
+        }
+
+        //判断当前时间是否秒杀活动即将开始或正在进行
+        if(promoModel.getStartDate().isAfterNow()){
+            promoModel.setStatus(1);
+        }else if(promoModel.getEndDate().isBeforeNow()){
+            promoModel.setStatus(3);
+        }else{
+            promoModel.setStatus(2);
+        }
+        //判断活动是否正在进行
+        if(promoModel.getStatus().intValue() != 2){
+            return null;
+        }
+        //判断item信息是否存在
+        ItemModel itemModel = itemService.getItemByIdInCache(itemId);
+        if(itemModel == null){
+            return null;
+        }
+        //判断用户信息是否存在
+        UserModel userModel = userService.getUserByIdInCache(userId);
+        if(userModel == null){
+            return null;
+        }
+
+        //获取秒杀大闸的count数量
+        long result = redisTemplate.opsForValue().increment("promo_door_count_"+promoId,-1);
+        if(result < 0){
+            return null;
+        }
+        //生成token并且存入redis内并给一个5分钟的有效期
+        String token = UUID.randomUUID().toString().replace("-","");
+
+        redisTemplate.opsForValue().set("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,token);
+        redisTemplate.expire("promo_token_"+promoId+"_userid_"+userId+"_itemid_"+itemId,5, TimeUnit.MINUTES);
+
+        return token;
+    }
+```
+
+```java
+	@RequestMapping(value = "/createorder",method = {RequestMethod.POST},consumes={CONTENT_TYPE_FORMED})
+    @ResponseBody
+    public CommonReturnType createOrder(@RequestParam(name="itemId")Integer itemId,
+                                        @RequestParam(name="amount")Integer amount,
+                                        @RequestParam(name="promoId",required = false)Integer promoId,
+                                        @RequestParam(name="promoToken",required = false)String promoToken) throws BusinessException {
+
+        if(!orderCreateRateLimiter.tryAcquire()){
+            throw new BusinessException(EmBusinessError.RATELIMIT);
+        }
+
+        String token = httpServletRequest.getParameterMap().get("token")[0];
+        if(StringUtils.isEmpty(token)){
+            throw new BusinessException(EmBusinessError.USER_NOT_LOGIN,"用户还未登陆，不能下单");
+        }
+        //获取用户的登陆信息
+        UserModel userModel = (UserModel) redisTemplate.opsForValue().get(token);
+        if(userModel == null){
+            throw new BusinessException(EmBusinessError.USER_NOT_LOGIN,"用户还未登陆，不能下单");
+        }
+        //校验秒杀令牌是否正确
+        if(promoId != null){
+            String inRedisPromoToken = (String) redisTemplate.opsForValue().get("promo_token_"+promoId+"_userid_"+userModel.getId()+"_itemid_"+itemId);
+            if(inRedisPromoToken == null){
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"秒杀令牌校验失败");
+            }
+            if(!org.apache.commons.lang3.StringUtils.equals(promoToken,inRedisPromoToken)){
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"秒杀令牌校验失败");
+            }
+        }
+
+        //同步调用线程池的submit方法
+        //拥塞窗口为20的等待队列，用来队列化泄洪
+        Future<Object> future = executorService.submit(new Callable<Object>() {
+
+            @Override
+            public Object call() throws Exception {
+                //加入库存流水init状态
+                String stockLogId = itemService.initStockLog(itemId,amount);
+
+
+                //再去完成对应的下单事务型消息机制
+                if(!mqProducer.transactionAsyncReduceStock(userModel.getId(),itemId,promoId,amount,stockLogId)){
+                    throw new BusinessException(EmBusinessError.UNKNOWN_ERROR,"下单失败");
+                }
+                return null;
+            }
+        });
+
+        try {
+            future.get();
+        } catch (InterruptedException e) {
+            throw new BusinessException(EmBusinessError.UNKNOWN_ERROR);
+        } catch (ExecutionException e) {
+            throw new BusinessException(EmBusinessError.UNKNOWN_ERROR);
+        }
+
+        return CommonReturnType.create(null);
+    }
+```
+
+
+
+```java
+	private RateLimiter orderCreateRateLimiter;
+
+    @PostConstruct
+    public void init(){
+        executorService = Executors.newFixedThreadPool(20);
+
+        orderCreateRateLimiter = RateLimiter.create(300);
+
+    }
+
+		Future<Object> future = executorService.submit(new Callable<Object>() {
+
+            @Override
+            public Object call() throws Exception {
+                //加入库存流水init状态
+                String stockLogId = itemService.initStockLog(itemId,amount);
+
+
+                //再去完成对应的下单事务型消息机制
+                if(!mqProducer.transactionAsyncReduceStock(userModel.getId(),itemId,promoId,amount,stockLogId)){
+                    throw new BusinessException(EmBusinessError.UNKNOWN_ERROR,"下单失败");
+                }
+                return null;
+            }
+        });
+```
+
