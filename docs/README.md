@@ -7,7 +7,7 @@
 
 **其他：**
 
-  - [一点儿小思考](_source/算法/ThinkingSummary.md)
+  - [一点儿小思考](_source/算法/笔试Summary.md)
   - [其他的小笔记](_source/算法/content-algorithm.md)
 
 ## ☁️ 计算机网络
