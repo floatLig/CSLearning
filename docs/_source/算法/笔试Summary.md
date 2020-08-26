@@ -1052,24 +1052,24 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
 1. ```java
    	// class是小写
-   	public static class Node {
+      	public static class Node {
            int key;
            int value;
            Node next;
            Node pre;
-   
+      
            public Node(int key, int value) {
                this.key = key;
                this.value = value;
            }
        }
-   
-   	// Integer不能是 int
+      
+      	// Integer不能是 int
        private HashMap<Integer, Node> map = new HashMap<>();
        private Node head = new Node(-1, -1);
        private Node tail = new Node(-1, -1);
        private int capacity = 0;
-   
+      
        public Solution() {
            head.next = tail;
            tail.pre = head;
@@ -1089,7 +1089,13 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
    
 
+##### 链表的反转。
 
+1. 需要三个指针。next指针在while中
+
+##### k组反转链表
+
+1. 需要dummyHead指针， pre指针，end指针。 start指针，next指针在while中
 
 
 

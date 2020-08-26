@@ -2,7 +2,7 @@
 
 1. finalize 垃圾回收的时候调用，一般用于资源的释放
 
-2. finally  相当于一个新的函数
+2. catch, finally  相当于一个新的函数，如果达不到的位置，写了代码机会报错
 
 3. stream流
 
@@ -102,7 +102,7 @@
 
 ##### 项目中用到的集合，源码
 
-1. ArrayList从数据库取出多条数据，HashMap将这个数据放到HashMap中去，因为秒杀系统是热电数据，如果用户进行查找，直接从 HashMap中取出来，（手机名，iPhone 10）
+1. ArrayList从数据库取出多条数据，HashMap将这个数据放到HashMap中去，因为秒杀系统是热点数据，如果用户进行查找，直接从 HashMap中取出来，（手机名，iPhone 10）
 2. ArrayList 底层是数组，add，扩容
 3. HashMap，1.8，put，数组是否为空，初始化容量 16，key 扰动函数 hash, &(容量 n  - 1)， 判断有没有元素，没有元素，就插入，size++, threadhold比较。如果说有元素的话，判断 key相等，覆盖，不相等话，treeNode, 不是的话，遍历数组，8，64 转换成红黑树
 4. resize , 初始化，size >= threadhold, 2倍的方式进行扩容
@@ -1028,7 +1028,7 @@ kill -15 一个比较优雅的终止命令。进程可以执行，也可以忽�
 
 
 
-CMP差错报告报文和询问报文
+ICMP差错报告报文和询问报文
 
 应用层数据单位是报文
 
@@ -1037,3 +1037,104 @@ CMP差错报告报文和询问报文
 按Ctrl+F5强制刷新 200
 
 206进行范围查询时，比如下载未完成的视频
+
+---
+
+
+
+clone()的理解：
+
+1. 会完成复制一个对象出来，但是如果这个对象里面有引用，那么它复制的也只是一个引用而已
+
+   ![image-20200826091659995](_img/image-20200826091659995.png)
+
+2. 如果想要深复制，则继承Clonable方法：
+
+   ```java
+   
+   class User implements Cloneable
+   {
+        public Object clone() throws CloneNotSupportedException
+        {
+         	User cloned = User super.clone();
+            cloned.birthday = (Data) hireDay.clone();
+            return cloned;
+        }
+   }
+   ```
+
+   
+
+---
+
+
+
+son.join(); 在哪里调用在哪里睡眠
+
+execption finally就类似于新的函数调用，但是要注意一个点，如果不可能达到的位置，如果写了代码，则会报错
+
+```java
+	// 不报错
+	private static void test() {
+        try {
+            System.out.println("try");
+            // 不能显示捕获
+            int a = 10 / 0;
+        }catch (Exception e) {
+            System.out.println("catch");
+            return;
+        }finally {
+            System.out.println("finally");
+        }
+        System.out.println("end");
+    }
+
+	// 报错
+	private static void test() {
+        try {
+            System.out.println("try");
+            // 显示
+            throw new Exception();
+        }catch (Exception e) {
+            System.out.println("catch");
+            return;
+        }finally {
+            System.out.println("finally");
+        }
+        // 提示删除，因为这一行不能达到
+        System.out.println("end");
+    }
+```
+
+
+
+线程池 Demo
+
+```java
+public class Demo {
+
+    public static class MyTask implements Runnable {
+
+        private String name;
+
+        public MyTask(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            System.out.println(name);
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ExecutorService pool = new ThreadPoolExecutor(5, 5, 60, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(3), new ThreadPoolExecutor.DiscardPolicy());
+
+        MyTask myTask1 = new MyTask("MyTask1");
+        pool.execute(myTask1);
+        pool.shutdown();
+    }
+}
+```
+
