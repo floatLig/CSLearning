@@ -202,6 +202,7 @@
 
 1. 利用 求和公式 - sum。 a1 * n + n * (n - 1)  * d / 2
 2. 利用一个桶一个位置的思想
+3. 二分
 
 ---
 
@@ -446,6 +447,7 @@ while (i < len - 1) {
    for (int i = 0; i < len; i++) {
        for (int j = 0; j < i; j++) {
            if (nums[i] > nums[j]) {
+               // 以dp为底
                if (dp[j] + 1 > dp[i]) {
                    dp[i] = dp[j] + 1;
                    count[i] = count[j];
@@ -458,8 +460,8 @@ while (i < len - 1) {
        //找出最长递增子序列的长度是多少
        max = Math.max(max, dp[i]);
    }
-   ```
-
+```
+   
    
 
 ---
@@ -780,13 +782,15 @@ while (i < len - 1) {
    
        private int find(int[] parent, int value) {
            // 等于0，这个点是父节点
-           while (parent[value] != 0) {
-               value = parent[value];
+           while (parents[node1] != node1) {
+               // 这么写的效率高100倍
+               parents[node1] = parents[parents[node1]];
+               node1 = parents[node1];
            }
            return value;
-       }
+    }
    ```
-
+   
    
 
 ##### 下一个排序
@@ -1040,7 +1044,7 @@ public class Main {
 
 小Q在周末的时候和他的小伙伴来到大城市逛街，一条步行街上有很多高楼，共有n座高楼排成一行。 
 
-  小Q从第一栋一直走到了最后一栋，小Q从来都没有见到这么多的楼，所以他想知道他在每栋楼的位置处能看到多少栋楼呢？（当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住） 
+小Q从第一栋一直走到了最后一栋，小Q从来都没有见到这么多的楼，所以他想知道他在每栋楼的位置处能看到多少栋楼呢？（当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住） 
 
 https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
@@ -1099,6 +1103,30 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
 
 
+##### 数组中重复的数字
+
+1. 桶的思想， for + 直接while + 交换出去
+
+##### 复杂链表的复制
+
+1. 链表不要交叉在一起，要一起分离
+
+##### 重建二叉树
+
+1. 对中序序列使用 HashMap
+
+##### 树的子结构
+
+1. 判断子结构时， 目标变为null就可以，本身可以不为null 
+
+
+
+##### 链表
+
+`whil(cur != null)`，不要 `cur.next`
+
+
+
 ## 有意思的代码
 
 1. ````java
@@ -1109,11 +1137,19 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
    ArrayList<String> stackList = new ArrayList<>(stack);
    ArrayList<String> setList = new ArrayList<>(stack);
    
+   List<Integer> list = Arrays.asList(1, 2, 3);
    ````
+
+
+
+`最好不要在 while 中使用 ++，容易出事`
+
+
 
 // 数组复制
    int temp = new int[nums.length];
    System.arraycopy(nums, 0, temp, 0, nums.length);
+
    ````
    
 2. `StringBuilder` -> `length()`,  `append()`, `deleteCharAt()`
@@ -1386,6 +1422,8 @@ int right_bound(int[] nums, int target){
 ### 6. 链表
 
 ```java
+// 链表不要交叉在一起，要一起分离
+
 //新将一个结点，这个结点的next指向原链表的头结点
 Node res = new Node(-1);
 res.next = head;
