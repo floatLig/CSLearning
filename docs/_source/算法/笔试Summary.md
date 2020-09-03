@@ -285,9 +285,46 @@ while (i < len - 1) {
 
 ##### 最小覆盖子串
 
-1. `不要在一个对象上吊死，一个对象分析问题不行，就从另一个对象上思考怎么解决`
-2. 对滑窗建一个HashMap，对目标string建立一个 HashMap，根据匹配的个数 match 进行判断滑窗的 right 是否需要再前进
-3. 当完全匹配后，滑动 left 去找到最小的 长度
+1. 需要两个HashMap + match的时候，可以做下简化。 用 int[] map = new int[256], 对第二个字符串++， 遍历第一个的时候--， match 为 第二个字符串的长度。
+
+   ```java
+   public String minWindow(String s, String t) {
+           if (s == null || t == null) return null;
+           
+           int[] map = new int[256];
+           for (char c : t.toCharArray()) {
+               map[c]++;
+           }
+           int match = t.length();
+           int left = 0, minLen = Integer.MAX_VALUE, resLeft = 0;
+           char[] chars = s.toCharArray();
+           // map 驱动 match == 0 驱动 left, minLen, resLeft
+           for (int right = 0; right < chars.length; right++) {
+               char c = chars[right];
+               map[c]--;
+               if (map[c] >= 0) {
+                   match--;
+               }
+               
+               if (match == 0) {
+                   while (map[chars[left]] < 0) {
+                       map[chars[left]]++;
+                       left++;
+                   }
+                   if (minLen > right - left + 1) {
+                       minLen = right - left + 1;
+                       resLeft = left;
+                   }
+                   map[chars[left]]++;
+                   match++;
+                   left++;
+               }
+           }
+           return minLen == Integer.MAX_VALUE ? "" : s.substring(resLeft, resLeft + minLen);
+       }
+   ```
+
+   
 
 ---
 
@@ -460,10 +497,7 @@ while (i < len - 1) {
        //找出最长递增子序列的长度是多少
        max = Math.max(max, dp[i]);
    }
-```
-   
-   
-
+   ```
 ---
 
 
@@ -1150,8 +1184,7 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
    int temp = new int[nums.length];
    System.arraycopy(nums, 0, temp, 0, nums.length);
 
-   ````
-   
+
 2. `StringBuilder` -> `length()`,  `append()`, `deleteCharAt()`
 
 ## 方法和经验总结✨
@@ -1206,7 +1239,7 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
 双指针同向遍历：
 
-​```java
+```java
 //-1可以理解为减掉一个位置（个数）
 for(int i = 0; i < nums.length - 1; i++){
     for(int j = i + 1; j < nums.length; j++){

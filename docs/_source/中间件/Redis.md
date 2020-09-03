@@ -160,6 +160,85 @@ flushall
 
 ## 4. 五大数据类型
 
+> cyc
+
+KV: 
+
+1. 添加，删除，获取元素。
+2. 添加多个元素
+3. 当元素不存在才能设置，设置过期时间，查看剩余时间
+4. 对整数，浮点数进行自增自减操作，设置步长
+
+LIST：
+
+1. 添加，删除，获取元素
+2. 队列的两端都可以添加删除元素
+3. 对队列进行裁剪
+
+SET：
+
+1. 添加，删除，判断元素是否存在，获取一个随机的元素
+2. 集合的差集，并集，交集
+
+HASH：
+
+1. 添加，删除，获取元素
+
+ZSET：
+
+1. 添加，删除，获取元素
+2. 根据分值进行排序
+
+
+
+| 操作               | key-value                   | list（可以看成LinkeddList）                                  | set                                       | hash                                             | zset                                                         |
+| ------------------ | --------------------------- | ------------------------------------------------------------ | ----------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| `添加`元素         | set name zzl （可存放JSON） | lpush list one<br><br/>rpush list zero<br><br/>rpoplpush list newlist<br><br/>insert list before one after | sadd set one<br><br/>smove set set2 one   | hset hash one 1                                  | zadd zset 1 one                                              |
+| 元素不存在才能插入 | setnx view 1                |                                                              |                                           | hsetnx hash two 2                                |                                                              |
+| 设置多个值         | mset k1 v1 k2 v2            | lpush list two three four five six                           | sadd set two three four                   | hset hash one 1 two 2 three 3                    | zadd zset 2 two 3 three                                      |
+| 原子操作           | msetnx k2 22 k3 33（失败）  |                                                              |                                           |                                                  |                                                              |
+| `获取`元素         | get name                    | (获取第一个元素) lrange list 0 0<br><br/>(通过下标) lindex list 0 | (随机获取)srandmember set 2               | hget hash one                                    | zscore zset one                                              |
+| 获取多个值         | mget k1 k2                  | lrange list 0 -1                                             |                                           | hgetall hash<br><br>hkeys hash<br><br>hvals hash | zrange zset 0 -1<br><br>zrangebyscore zset -inf +inf withscores<br><br>zrangebyscore zset -inf 1 withscores<br><br>zcount zset 1 2 |
+| `删除`元素         | del k1                      | lpop list<br><br/>rpop list <br><br/>(1为个数) lrem list 1 one<br><br/>(1 2为index) ltrim list 1 2 | srem set four<br><br/>(随机删除) spop set |                                                  | zrem zset one                                                |
+| `设置`值           |                             | lset list 0 item                                             |                                           |                                                  |                                                              |
+| 设置过期时间       | expire name 10              |                                                              |                                           |                                                  |                                                              |
+| 排序               |                             |                                                              |                                           |                                                  | (从大到小排序)zrevrange zset 0 -1                            |
+| `查看`key剩余时间  | ttl name                    |                                                              |                                           |                                                  |                                                              |
+| 判断key是否存在    | exists name                 |                                                              | sismember set one                         | hexists hash two                                 |                                                              |
+| 查看所有元素       | keys *                      | lrange list 0 -1                                             | smembers set                              |                                                  |                                                              |
+| 查看key类型        | type name                   |                                                              |                                           |                                                  |                                                              |
+| 返回列表长度       | dbsize                      | llen list                                                    | scard set                                 | hlen hash                                        | zcard zset                                                   |
+| 差集               |                             |                                                              | sdiff set set2                            |                                                  |                                                              |
+| 交集               |                             |                                                              | sinter set set2                           |                                                  |                                                              |
+| 并集               |                             |                                                              | sunion set set2                           |                                                  |                                                              |
+| 移动到别的数据库   | move k2 1                   |                                                              |                                           |                                                  |                                                              |
+| 对key追加字符      | append name hello           |                                                              |                                           |                                                  |                                                              |
+| 获取key字符串长度  | strlen name                 |                                                              |                                           |                                                  |                                                              |
+| 替换key的值        | setrange name 3 YYYY        |                                                              |                                           |                                                  |                                                              |
+| 获取字符串指定范围 | getrange name 0 2           |                                                              |                                           |                                                  |                                                              |
+| 获取全部的字符串   | getrange name 0 -1          |                                                              |                                           |                                                  |                                                              |
+| 自增               | incr views                  |                                                              |                                           | hincrby hash two 1                               |                                                              |
+| 自减               | decr viewes                 |                                                              |                                           | hincrby hash two -1                              |                                                              |
+| 设置步长，自增     | incrby views 10             |                                                              |                                           | hincrby hash two -1000                           |                                                              |
+
+
+
+**zset的底层原理：**
+
+> 来自redis的设计与实现
+
+zset的底层主要是由`跳表`实现的。在Redis总，跳表用两个数据结构进行描述，分别是 `zskiplist` 和 `zskiplistNode`。
+zskiplist，主要用来表述跳表的结构信息，包括跳表的头结点，尾结点，层数，跳表的长度
+zskiplistNode，主要用来描述跳表主要用来表述跳表每一个节点的信息。包括 层数数组（每一层有前进指针和跨）度； 后退指针，分值，对象。
+
+每一次创建跳表节点的时候，会根据幂次定律（数越大出现的概率越小）随机生成1 到 32 之间的一个随机数作为跳表的层数，这个大小就是跳表的高度。
+
+跳表中的节点是按照分值的大小进行排序的。
+
+![image-20200903163249560](_img/image-20200903163249560.png)
+
+
+
 ### 4.1 Key-Value
 
 ```bash
@@ -997,6 +1076,13 @@ AOF默认就是文件的无线追加，文件会越来越大。
 AOF运行效率比RDB慢的多
 
 ## 9. Redis发布订阅
+
+> redis设计与实现
+
+1. subscribe命令，客户端可以订阅一个或多个频道, `subscribe "news.it"`
+2. pushlist 命令，可以向频道发送消息， `publish "new.it" "hello"`
+3. psubscribe命令，订阅一个或多个模式，成为`这个模式`的订阅者。消息不仅会发送每个频道的订阅者，还会发送给与这个频道相匹配的模式的订阅者。
+
 
 Redis发布订阅（pub / sub）是一种消息通信模型：发送者（pub）发送消息，订阅者（sub）接收消息。微信、微博、关注系统。
 
