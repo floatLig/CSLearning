@@ -1,5 +1,11 @@
 ## 思路
 
+手撕代码的时候，要注意对象用 equals， 而不是 ==
+
+
+
+
+
 ##### 全排列 +  组合
 
 1. 联想递归树 + 递归树的每一层是 最终结果的第 i 个元素 + 后面的元素可选择的数，构成了 分支
@@ -283,7 +289,7 @@ while (i < len - 1) {
 
 
 
-##### 最小覆盖子串
+##### SHEIN：最小覆盖子串
 
 1. 需要两个HashMap + match的时候，可以做下简化。 用 int[] map = new int[256], 对第二个字符串++， 遍历第一个的时候--， match 为 第二个字符串的长度。
 
@@ -328,6 +334,13 @@ while (i < len - 1) {
 
 ---
 
+##### 最大连续1的个数 III
+
+<https://leetcode-cn.com/problems/max-consecutive-ones-iii/>
+
+利用滑动窗口，在这个窗口中，允许有多少个1
+
+---
 
 
 ##### 盛最多水的容器
@@ -451,6 +464,16 @@ while (i < len - 1) {
 
 ---
 
+##### 拼凑硬币
+
+给你六种面额1、5、10、20、50、100元的纸币，假设每种币值的数量都足够多，编写程序求组成N元（N为0-10000的非负整数）的不同组合的个数。
+
+
+<https://www.nowcoder.com/questionTerminal/14cf13771cd840849a402b848b5c1c93>
+
+状态的变化是”硬币的组合“，而不是硬币的个数
+
+---
 
 
 ##### 分割等和子集
@@ -1161,7 +1184,198 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 
 
 
+##### 搜狗：分礼物
+
+给三个数，为 a, b, c，假设为 4 4 2； 一个a,一个b,一个c可以换一个礼物。任意两个字母可以替换成另一个字母。问最多能换成多少个礼物。
+
+4个a, 4个b, 2个c -> 2a 2b 2c 换两个礼物 ，剩下2a, 2b, 0c -> a, b换成 一个c -> a, b, c 换一个礼物，所以最多可以换3个礼物。
+
+```java
+// 二分，期望值是 mid,判断是否符合期望值，调整left, right
+public int numberofprize (int a, int b, int c) {
+        // write code here
+        int left=min(a,b,c);
+        int right=max(a,b,c);
+        while (left<=right){
+            int mid=left+(right-left)/2;
+            if (check(mid,a,b,c)){
+                left=mid+1;
+            }else{
+                right=mid-1;
+            }
+        }
+        return right;
+    }
+
+    // 判断 期望值是mid， 能不能达成
+    private boolean check(int mid, int a, int b, int c) {
+        // left 是能剩下多少个
+        long left=0;
+        if (a>=mid){
+            // left剩下的
+            left+=(a-mid);
+        }else {
+            // 需要转换的
+            left-=(2*(mid-a));
+        }
+        if (b>=mid){
+            left+=(b-mid);
+        }else {
+            left-=(2*(mid-b));
+        }
+        if (c>mid){
+            left+=(c-mid);
+        }else {
+            left-=(2*(mid-c));
+        }
+        // 如果left >= 0,说明可以凑成，否则，凑不成
+        return left>=0;
+    }
+
+    private int min(int a, int b, int c) {
+        return Math.min(Math.min(a,b),c);
+    }
+    private int max(int a, int b, int c) {
+        return Math.max(Math.max(a,b),c);
+    }
+
+```
+
+##### 搜狗：确定能建多少个房子
+
+![image-20200905235611143](_img/image-20200905235611143.png)
+
+![image-20200905235634499](_img/image-20200905235634499.png)
+
+直接判断不同相邻两座房子的距离即可
+
+```java
+public int getHouses(int t, int[] xa) {
+        // 左右两边一定可以
+        int res = 2;
+
+        for (int i = 0; i < xa.length; i = i + 2) {
+            if (i + 2 < xa.length) {
+                // 直接判断距离即可
+                double len = (xa[i + 2] - xa[i + 3] / 2.0) - (xa[i] + xa[i + 1] / 2.0);
+                // 如果距离恰好相等，则 +1， 否则，可以 + 2
+                if (len == t) {
+                    res += 1;
+                } else if (len > t){
+                    res += 2;
+                }
+
+            }
+        }
+        System.out.println(res);
+        return res;
+    }
+```
+
+##### 搜狗： 新密码
+
+直接暴力搜索不行吗？！ 优化就是再加上记忆化搜索
+
+最大值只有50，求求下次机灵点
+
+<https://www.nowcoder.com/discuss/500351?type=post&order=time&pos=&page=1&channel=1009&source_id=search_post>
+
+
+
+##### 美团：判断字符串是否合法
+
+```java
+private void solution() {
+    Scanner scanner = new Scanner(System.in);
+    int n = scanner.nextInt();
+    String str = scanner.next();
+    int m = str.indexOf('M');
+    str = str.substring(m + 1);
+    m = str.indexOf('T');
+    str = str.substring(m + 1);
+    m = str.lastIndexOf('T', str.length());
+    str = str.substring(0, m);
+    m = str.lastIndexOf('M', str.length());
+    str = str.substring(0, m);
+    System.out.println(str);
+}}
+```
+
+##### 招银网络：判断图是否有环
+
+深度遍历
+
+```java
+import java.util.*;
+
+public class FirstTest {
+    private ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+    public static void main(String[] args) {
+        new FirstTest().solution();
+    }
+
+    public void solution() {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int[][] grid = new int[n][n];
+        int rows = grid.length;
+        int cols = grid[0].length;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                grid[i][j] = scanner.nextInt();
+            }
+        }
+        int target = scanner.nextInt();
+
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(target); // set.add(target)
+        recur(grid, target, list, new HashSet<>());
+        for (int i = 0; i < res.size(); i++) {
+            ArrayList<Integer> ele = res.get(i);
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < ele.size(); j++) {
+                sb.append(ele.get(j));
+            }
+            System.out.println(sb.toString());
+        }
+    }
+
+    private void recur(int[][] grid, int target, ArrayList<Integer> path, HashSet<Integer> set) {
+        //if (path.size() > 1 && path.) falg
+        int val = path.get(path.size() - 1);
+        for (int i = 0; i < grid[val].length; i++) {
+            if (grid[val][i] == 1) {
+                // 有环路,但是环路的点不是 target
+                if (set.contains(i)) {
+                    //------------------------------------------------手撕的时候这里写成 return，所以错了
+                    continue;
+                }
+                // 有环路
+                if (i == target) {
+                    res.add(new ArrayList<>(path));
+                } else {
+                    path.add(i);
+                    set.add(i);
+                    recur(grid, target, path, set);
+                    path.remove(path.size() - 1);
+                    set.remove(i);
+                }
+            }
+        }
+    }
+
+}
+```
+
+
 ## 有意思的代码
+
+
+
+手撕代码的时候，要注意对象用 equals， 而不是 ==
+
+
 
 1. ````java
    // 要遍历 stack、set 时，转成 ArrayList

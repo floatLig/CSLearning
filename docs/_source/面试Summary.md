@@ -1261,7 +1261,9 @@ tcpdump：抓包工具 `-i any` 抓取任意端口， `-w 保存` 和wireshark �
 
 netstat -ntpl ： -n 以IP显示， t tcp, p进程， l 监听。 服务的监听地址
 
-show processlist, 查看当前数据库的连接数
+---
+
+数据库：show processlist, 查看当前数据库的连接数
 
 ---
 
@@ -1280,6 +1282,10 @@ show processlist, 查看当前数据库的连接数
 出现大量的 CLOSE_WAIT：
 
 https://juejin.im/post/6844903734300901390
+
+netstat
+
+tcpdump
 
 ---
 
@@ -1302,7 +1308,7 @@ UDP是无连接的，提供尽最大努力的数据传输服务。传输的单�
 1. 浏览器的套接字发送了HTTP请求
 2. 网络层 源IP ： DHCP   DHCP请求报文  源端口 68 目的端口67， ACK的响应报文
 3. 目的IP DNS
-4. 目的 MAC地址
+4. 目的 MAC地址 ARC查询报文
 
 ### OSI 七层模型
 
