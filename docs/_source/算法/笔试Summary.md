@@ -1,8 +1,19 @@
-## 思路
+### 手撕代码容易犯错的点
 
-手撕代码的时候，要注意对象用 equals， 而不是 ==
+需要内心宁静。
+
+1. 一定要先画图！
+2. 想着画的图，一步一步的写，写的时候，确定自己是不会写错
+3. 加上必要的备注，我要注意哪些数据结构； 求max的时候，max要备注，`return max == Integer.MIN_VALUE ? 0 : max;`
+4. 手撕代码的时候，要注意对象用 equals， 而不是 ==
+
+---
+
+1. 链表递归的时候，有的题在 if(node.left == null && node.right == null) 的时候就可以做判断了
 
 
+
+### 思路
 
 
 
@@ -1103,7 +1114,7 @@ public class Main {
 
 小Q从第一栋一直走到了最后一栋，小Q从来都没有见到这么多的楼，所以他想知道他在每栋楼的位置处能看到多少栋楼呢？（当前面的楼的高度大于等于后面的楼时，后面的楼将被挡住） 
 
-https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
+<https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a>
 
 1. 使用多一个数组保存数据
 
@@ -1157,8 +1168,49 @@ https://www.nowcoder.com/questionTerminal/35fac8d69f314e958a150c141894ef6a
 ##### k组反转链表
 
 1. 需要dummyHead指针， pre指针，end指针。 start指针，next指针在while中
+2. reverse(start, end)。 其中，需要先设置 end.next = null;
 
+##### 链表指定区间内反转
 
+将一个链表 m m 位置到 n n 位置之间的区间反转，要求时间复杂度 ，空间复杂度 。
+例如：
+给出的链表为 1 ->  2  ->  3  ->  4  ->  5  ->  NULL, m = 2, n = 4  
+返回 1 ->  4 ->  3 ->  2 ->  5 ->  NULL
+
+```java
+public class Solution {
+    /**
+     * 
+     * @param head ListNode类 
+     * @param m int整型 
+     * @param n int整型 
+     * @return ListNode类
+     */
+    public ListNode reverseBetween (ListNode head, int m, int n) {
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+        ListNode pre = dummyHead;
+        for (int i = 1; i <= m - 1; i++) {
+            pre = pre.next;
+        }
+        
+        // dummyHead, pre, start, 
+        ListNode start = pre.next;
+        // 直接进行反转，temp, cur也会到指定的位置
+        ListNode temp = null;
+        ListNode cur = start;
+        for (int i = m; i <= n; i++) {
+            ListNode next = cur.next;
+            cur.next = temp;
+            temp = cur;
+            cur = next;
+        }
+        pre.next = temp;
+        start.next = cur;
+        return dummyHead.next;
+    }
+}
+```
 
 ##### 数组中重复的数字
 
@@ -1369,12 +1421,150 @@ public class FirstTest {
 ```
 
 
+
+##### 三数之和
+
+1. 以一个数固定，剩余的两个数用 双指针
+2. 如果说， nums[i] > 0，则后面不用看了, nums[i - 1] == nums[i]，则可以跳过
+3. 在这个过程中需要注意的点：用`int sum = nums[i] + nums[left] + nums[right]`，判断`sum == 0`，而不是 `int target = -nums[i]`
+4. left移动的时候，相同的元素需要跳过，`while (nums[left + 1 < right && nums[left + 1] == nums[left]]) left++`
+
+
+
+##### 买卖股票的最佳时机
+
+1. 买入的时候，价格已经是定义成`负数`了，所有后面使用 ”+“ 
+
+
+##### 只出现一次的两个数字
+
+1. 相等的数 异或 -> 0
+2. n & (-n) -> -n 是取反再加一， 最低位的1保留，其他都为0
+3. 位运算的优先级比较低，最好加上括号
+
+
+##### 最大正方形
+
+给定一个由0和1组成的2维矩阵，返回该矩阵中最大的由1组成的正方形的面积
+
+```
+输入
+[[1,0,1,0,0],[1,0,1,1,1],[1,1,1,1,1],[1,0,0,1,0]]
+输出
+4
+```
+
+```java
+    /**
+     * 最大正方形
+     * @param matrix char字符型二维数组 
+     * @return int整型
+     */
+    public int solve (char[][] matrix) {
+        int cols = matrix.length;
+        int rows = matrix[0].length;
+        // dp
+        int[][] dp = new int[cols][rows];
+        for (int i = 0; i < cols; i++) {
+            dp[i][0] = matrix[i][0] - '0';
+        }
+        for (int i = 0; i < rows; i++) {
+            dp[0][i] = matrix[0][i] - '0';
+        }
+        
+        int max = 0;
+        for (int i = 1; i < cols; i++) {
+            for (int j = 1; j < rows; j++) {
+                if (matrix[i][j] == '1') {
+                    dp[i][j] = Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
+                    max = Math.max(max, dp[i][j]);
+                }
+            }
+        }
+        return max * max;
+    }
+```
+
+##### 反转数字
+
+将给出的整数x翻转。
+例1:x=123，返回321
+例2:x=-123，返回-321
+
+你有思考过下面的这些问题么？
+如果整数的最后一位是0，那么输出应该是什么？比如10,100
+你注意到翻转后的整数可能溢出吗？假设输入是32位整数，则将翻转10000000003就会溢出，你该怎么处理这样的样例？抛出异常？这样做很好，但是如果不允许抛出异常呢？这样的话你必须重新设计函数（比如添加一个额外的参数）。
+
+```
+示例1
+输入
+-123
+输出
+-321
+```
+
+利用数字 * 10 再相加，得到反转后的数字。
+```java
+    /**
+     * 
+     * @param x int整型 
+     * @return int整型
+     */
+    public int reverse (int x) {
+        // 是否是大于0
+        boolean flag = x >= 0 ? true : false;
+        x = Math.abs(x);
+        
+        int res = 0;
+        while (x != 0) {
+            int v = x % 10;
+            int temp = res;
+            res = (res * 10) + v;
+            // 判断是否溢出
+            if ((res - v) / 10 != temp) return 0;
+            x /= 10;
+        }
+        
+        res = flag ? res : -res;
+        return res;
+    }
+```
+
+##### 子数组的最大乘机
+
+题目描述
+给定一个double类型的数组arr，其中的元素可正可负可0，返回子数组累乘的最大乘积。例如arr=[-2.5，4，0，3，0.5，8，-1]，子数组[3，0.5，8]累乘可以获得最大的乘积12，所以返回12。
+
+因为有负数，所以需要保存 min, max
+
+```java
+    public double maxProduct(double[] arr) {
+        int len = arr.length;
+        // 注意返回的是 double
+        if (len == 0) return 0.0;
+        
+        // 以这个点结尾的最大值，最小值
+        double max = arr[0];
+        double min = arr[0];
+        double res = arr[0];
+        for (int i = 1; i < len; i++) {
+            double val = arr[i];
+            double temp = max;
+            max = Math.max(val, Math.max(val * min, val * max));
+            min = Math.min(val, Math.min(val * min, val * temp));
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+```
+
+
+
+
+
+
+
 ## 有意思的代码
-
-
-
-手撕代码的时候，要注意对象用 equals， 而不是 ==
-
 
 
 1. ````java
