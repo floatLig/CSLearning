@@ -532,9 +532,97 @@ while (i < len - 1) {
        max = Math.max(max, dp[i]);
    }
    ```
+
 ---
 
+最长增长子序列，最小字典序
 
+ 1. end记录最长的子序列，和之前的思路一样
+ 2. count 记录arr的每个i，对应在end数组上的哪个位置。后面就要根据这个 end 来确定 res
+
+给定数组arr，设长度为n，输出arr的最长递增子序列。（如果有多个答案，请输出其中字典序最小的）
+```
+示例1
+输入
+[2,1,5,3,6,4,8,9,7]
+输出
+[1,3,4,8,9]
+示例2
+输入
+[1,2,8,6,4]
+输出
+[1,2,4]
+说明
+其最长递增子序列有3个，（1，2，8）、（1，2，6）、（1，2，4）其中第三个字典序最小，故答案为（1，2，4）
+```
+
+```java
+    /**
+    
+    arr:     2  1  5  3  6  4  8  9  7
+    count:   0  0  1  1  2  2  3  4  3
+    end:     2
+             1
+             1  5
+             1  3
+             1  3  6
+             1  3  4
+             1  3  4  8
+             1  3  4  8  9
+             1  3  4  7  9
+    
+     * retrun the longest increasing subsequence
+     * @param arr int整型一维数组 the array
+     * @return int整型一维数组
+     */
+    public int[] LIS (int[] arr) {
+        int len = arr.length;
+        if (len == 0) return new int[0];
+        
+        // count, end, index
+        // end记录最长的子序列，和之前的思路一样
+        // 使用数组，不使用 ArrayList
+        int[] end = new int[len];
+        // count 记录arr的每个i，对应在end数组上的哪个位置。后面就要根据这个 end 来确定 res
+        int[] count = new int[len];
+        end[0] = arr[0];
+        count[0] = 0;
+        int index = 0;
+        
+        for (int i = 1; i < len; i++) {
+            int val = arr[i];
+            if (val > end[index]) {
+                end[++index] = val;
+                count[i] = index;
+            } else {
+                int left = 0, right = index;
+                while (left <= right) {
+                    int mid = (left + right) / 2;
+                    if (end[mid] >= val) {
+                        right = mid - 1;
+                    } else {
+                        left = mid + 1;
+                    }
+                }
+                if (left <= index) {
+                    end[left] = val;
+                    count[i] = left;
+                }
+            }
+        }
+        
+        int[] res = new int[index + 1];
+        //index = res.length - 1;
+        for (int i = count.length - 1; i >= 0; i--) {
+            if (count[i] == index) {
+                res[index] = arr[i];
+                index--;
+            }
+        }
+        return res;
+    }
+
+```
 
 ##### 最长回文子序列
 
@@ -1558,7 +1646,10 @@ public class FirstTest {
     }
 ```
 
+##### 4.寻找两个正序数组的中位数
 
+1. nums1 的长度要小于 nums2
+2. right = len1，而不是 right = len1 - 1
 
 
 
@@ -1598,11 +1689,11 @@ public class FirstTest {
 
 | 数据结构/算法 | 要点                                                         |
 | :-----------: | :----------------------------------------------------------- |
-|     数组      | 将数组`排序`<br><br>`双指针`:<br><br>`夹逼`定理，通过夹逼可以剪掉很多无意义的答案。<br><br>`二分法` |
+|     数组      | 将数组`排序`<br><br>`双指针`:<br><br>`夹逼`定理，通过夹逼可以剪掉很多无意义的答案。<br><br>`二分法`<br />中心扩散<br />滑动窗口 |
 |     链表      | head创建一个新的结点，return head.next                                                                                                                                          / return head <br><br> head == cur |
 |     递归      | `模板`<br><br>决策的时候，可以从小问题推到大问题<br><br>`明白一个函数的作用并相信它能完成这个任务【递归进入下一层】` |
 |      树       | 结果为返回值【全局变量】 recur另起函数写 （参数是对象还是值，对象注意添加用new，清理时需回退）<br><br> 根据参数确定终止条件<br><br>想想局部变量用不用判断<br><br>递归只关注本层 |
-|      栈       | <br>处理的问题的`有最近相关性`时可以尝试用栈。（因为栈压入和弹出都是最近的元素）。`有洋葱结构时`(如括号匹配({[]}))<br><br>需要暂时保留数据，处理是先处理后面的数据。（单调栈，括号匹配） |
+|      栈       | <br>处理的问题的`有最近相关性`时可以尝试用栈。（因为栈压入和弹出都是最近的元素）。`有洋葱结构时`(如括号匹配({[]}))<br><br>需要暂时保留数据，处理是先处理后面的数据。（单调栈，括号匹配）<br /><br /><br />单调栈 |
 |    哈希表     | `key不能重复，通过key快速找到value。`                        |
 |     回溯      | 求最值。递归时，`直接遍历到树底`，然后回溯，选择另一个决策。【回溯的结果是`终点-叶子`，分治的结果是`树根`】 |
 |   二分查找    | <br>1. 存在单调递增/递减<br> 2. 有上下界 <br> 3. 能够通过索引访问 <br><br>`排序后的数组[0 - length - 1]` |
