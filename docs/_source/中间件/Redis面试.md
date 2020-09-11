@@ -1,3 +1,79 @@
+### Redis的应用
+
+1. 对文章排序
+
+文章的存放信息用 hash。
+
+- article:92617
+  - title:
+  - link:
+  - poster: user:83271
+  - time
+  - votes
+
+时间排序用 zset
+
+- time:
+  - atricle:100408   -> 对应的分数： 时间+点赞数量加分
+
+得分排序用 zset
+
+- score:
+  - atricle:100408   -> 对应的分数： 时间+点赞数量加分
+
+- voted:100408
+    - user:234487
+
+
+2. 发布并获取文章
+
+文章的id通过对一个全局的 计数器 incr， 创建上面的数据结构
+
+3. 对文章进行分组
+
+对应的分组用 set表示，将对应的文件放入到这个分组里。
+
+后续可以用 交集子类的操作，还可以将 set 作为 有序集合的输入
+
+该分组的set 和 得分排序 zset 进行交集运算，就可以得到新的 排序。
+
+
+4. 用户信息：hash
+
+- user:1399014
+  - login
+  - id
+  - name
+  - followers
+  - following
+  - posts：发布文章数量
+  - signup:注册日期
+
+5. 状态信息
+
+- status:2424218
+  - message: 个性签名
+  - posted:
+  - id
+  - uid
+  - login
+
+6. 主页时间线
+
+- home:4342379224
+  - 文章id
+
+7. 关注着列表
+
+- followers:4342
+  - 用户id -> 关注的时间
+
+8. 我关注的列表
+
+9. 发送消息
+
+向关注着发送消息。
+
 ### 在项目中缓存是如何使用的
 
 秒杀系统里面有：商品信息、用户token，id、订单、中间变量（判断秒杀是不是已经结束）
@@ -103,12 +179,12 @@ IO多路复用程序：操作系统底层使用select/poll/epoll/kqueue之类的
 
 答案是：`走内存淘汰机制`。
 
-volatile-lru	从已设置过期时间的数据集中挑选最近最少使用的数据淘汰
-volatile-ttl	从已设置过期时间的数据集中挑选将要过期的数据淘汰
-volatile-random	从已设置过期时间的数据集中任意选择数据淘汰
-allkeys-lru	从所有数据集中挑选最近最少使用的数据淘汰（默认）
-allkeys-random	从所有数据集中任意选择数据进行淘汰
-noeviction	禁止驱逐数据
+volatile-lru	从已设置过期时间的数据集中挑选最近最少使用的数据淘汰  
+volatile-ttl	从已设置过期时间的数据集中挑选将要过期的数据淘汰  
+volatile-random	从已设置过期时间的数据集中任意选择数据淘汰  
+allkeys-lru	从所有数据集中挑选最近最少使用的数据淘汰（默认）  
+allkeys-random	从所有数据集中任意选择数据进行淘汰  
+noeviction	禁止驱逐数据  
 
 > 当使用volatile-lru、volatile-random、volatile-ttl这三种策略时，如果没有key可以被淘汰，则和noeviction一样返回错误
 
