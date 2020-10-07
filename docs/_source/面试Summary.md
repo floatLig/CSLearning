@@ -468,7 +468,10 @@ monitor对象
 
 
 
-单例模式，双重锁检测为什么要写 volatile
+单例模式，双重锁检测为什么要写 volatile，防止指令重排序
+
+> <https://cloud.tencent.com/developer/article/1475758>
+被volatile关键字修饰的对象作为类变量或者实例变量时，`其对象中携带的类变量和实例变量`也相当于被volatile关键字修饰
 
 ---
 
