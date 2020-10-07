@@ -825,6 +825,12 @@ CPU的利用率不高，是否有太多的锁？
 
 自动解冻可以在应用程序中设置一个定时器来定时扫描数据库的下单时间，来比较是否已经超时延时一点问题也不大，因为超时时间也是人为主观设置的
 
+定时器实现： while + sleep()
+
+令牌桶：允许突发流量
+
+令牌桶和漏桶对比： 令牌桶的主要目的是保护自身不被大流量冲垮，漏桶是对接的下游系统，像第三方系统（承受不了大流量）
+
 ```java
 	@Override
     public String generateSecondKillToken(Integer promoId,Integer itemId,Integer userId) {
