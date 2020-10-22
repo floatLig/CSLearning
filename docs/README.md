@@ -21,6 +21,7 @@
 
 ## 💾 数据库
 
+- [MySQL](_source/数据库/MySQL.md)
 - [SQL](_source/数据库/SQL.md)
 
 ## ☕️ Java
