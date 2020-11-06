@@ -6,7 +6,7 @@
 
 3. stream流
 
-   >  https://www.jianshu.com/p/6fdc94ea577d
+   >  <https://www.jianshu.com/p/6fdc94ea577d>
 
    ![image-20200817233243545](_img/image-20200817233243545.png)
 
@@ -130,7 +130,7 @@
 
 ### 动态代理、cglib
 
-> https://apppukyptrl1086.pc.xiaoe-tech.com/detail/v_5e0cba7b5f987_rEHvwPy7/3?from=p_5dd3ccd673073_9LnpmMju&type=6
+> <https://apppukyptrl1086.pc.xiaoe-tech.com/detail/v_5e0cba7b5f987_rEHvwPy7/3?from=p_5dd3ccd673073_9LnpmMju&type=6>
 
 其实就是动态的创建一个代理类出来，创建这个代理类的实例对象，在这个里面引用你真正自己写的类，所有的方法的调用，都是先走代理类的对象，他负责做一些代码上的增强，再去调用你写的那个类
 
@@ -648,7 +648,7 @@ io多路复用：
 
 ### nginx:
 
-nginx面试题：https://juejin.im/post/6844904125784653837
+nginx面试题：<https://juejin.im/post/6844904125784653837>
 
 为什么使用nginx： http服务器， 反向代理负载均衡， 简单
 
@@ -656,7 +656,7 @@ nginx面试题：https://juejin.im/post/6844904125784653837
 
 正向代理和反向代理的作用和目的不同。正向代理主要是用来解决访问限制问题。而反向代理则是提供负载均衡、安全防护等作用。二者均能提高访问速度。
 
-nginx高性能的原因：https://blog.csdn.net/yin__ren/article/details/93619025 1. io多路复用， 2. master-worker进程模型 3. 协程机制
+nginx高性能的原因：<https://blog.csdn.net/yin__ren/article/details/93619025> 1. io多路复用， 2. master-worker进程模型 3. 协程机制
 
 负载均衡算法：轮询、加权轮询、最小连接数、加权最小连接、IP hash、 随机
 
@@ -697,7 +697,7 @@ nginx负载均衡
 - **我们使用spring-session以及集成好的解决方案，存放在redis中**
 
 作者：java高级架构41397
-链接：https://juejin.im/post/6844903740479160334
+链接：<https://juejin.im/post/6844903740479160334>
 来源：掘金
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
@@ -744,7 +744,7 @@ nginx负载均衡
 ### 热点数据：分为静态热点数据、动态热点数据。
 
 1. 静态热点数据就是能够提前预测的数据，可以通过买家报名的方式，提前对热点数据打上标签。`做预热`
-2. 动态热点数据就不能提前预测，比如抖音上突然某种产品火了，这里就只能做限流处理，进行保护。也需要发现动态热点数据。可以分析各个环节中间件的热点key，比如 Nginx的热点URL(https://www.jianshu.com/p/537a0bddda94)
+2. 动态热点数据就不能提前预测，比如抖音上突然某种产品火了，这里就只能做限流处理，进行保护。也需要发现动态热点数据。可以分析各个环节中间件的热点key，比如 Nginx的热点URL(<https://www.jianshu.com/p/537a0bddda94>)
 
 
 
@@ -953,7 +953,7 @@ CPU的利用率不高，是否有太多的锁？
 
 ### 限流
 
-RateLimiter http://ifeve.com/guava-ratelimiter/
+RateLimiter <http://ifeve.com/guava-ratelimiter/>
 
 获取不到的线程会阻塞。
 
@@ -1205,7 +1205,7 @@ top:
 
 ![image-20200827101819576](_img/image-20200827101819576.png)
 
-https://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316399.html
+<https://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316399.html>
 
 total 进程总数
 running 正在运行的进程数
@@ -1496,7 +1496,7 @@ Stack栈：主线程的函数调用栈就是在这里
 
 ![image-20200909000659962](_img/image-20200909000659962.png)
 
-https://blog.csdn.net/qq9808/article/details/80933396
+<https://blog.csdn.net/qq9808/article/details/80933396>
 
 
 
@@ -1819,7 +1819,7 @@ swap分区是磁盘的一块空间，可以认为是虚拟内存。
 
    弱类型语言，像python，php，如何做到O(1)的时间复杂度
 8. gc日志的报警，怎么设置报警规则  
-9.  MySQL 有一个表 user表，有两个字段 userid, userdata。 ( userdata是json格式，有很多数据，包括name, age等等)
+9. MySQL 有一个表 user表，有两个字段 userid, userdata。 ( userdata是json格式，有很多数据，包括name, age等等)
     设计一个接口，传入一个id， 和任意类型的数据，比如age，name，然后对特定的数据进行修改。  SQL怎么写  
 
     两个设备下，一个设备修改age，另一个设备修改name，同时修改，但是最后发现age修改成功了，name没有修改成功，为什么？  
