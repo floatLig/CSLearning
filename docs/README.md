@@ -29,41 +29,11 @@
 
 #### Java基础
 
-  - [Java基础](_source/JavaBasics/Java基础.md)
-  - [Java虚拟机概述](_source/JavaBasics/Java虚拟机.md)
-  - [Java内存模型与线程](_source/JavaBasics/Java内存模型与线程.md)
-  - [Java-API](_source/JavaBasics/content-JavaApi.md)<br><br>
-  - [IO](_source/JavaBasics/IO.md)
-  - [网络编程](_source/JavaBasics/网络编程.md)<br><br>
-
-#### B/S
-
-  - [Http、Servlet和Tomcat](_source/Browser-Server/04ServletAndTomcat.md)
-  - [Cookie、Session和ServletContext](_source/Browser-Server/Cookie-Session-servletContex.md)
-  - [Web.xml和Service.xml](_source/Browser-Server/Web.xml-Service.xml.md)
-  - [Ajax、Filter和Listener](_source/Browser-Server/Ajax-Filter-Listener.md)
+- [目录](_source/JavaBasics/content.md)
 
 ## 🎯 Java框架
 
-### Mybatis
-
-  - [Mybatis入门](_source/Mybatis/Mybatis01.md)
-  - [Mybatis-CRUD](_source/Mybatis/Mybatis02.md)
-  - [Mybatis-进阶](_source/Mybatis/Mybatis03.md)
-  - [Mybatis-注解](_source/Mybatis/Mybatis04.md)
-
-### Spring
-
-  - [Spring介绍、IoC](_source/SpringFrameWork/Spring01.md)
-  - [Spring IoC的注解](_source/SpringFrameWork/Spring02.md)
-  - [代理模式、AOP入门](_source/SpringFrameWork/Spring03.md)
-  - [事务控制](_source/SpringFrameWork/Spring04.md)
-
-### SpringMVC
-
-  - [SpringMVC概述、注解](_source/springMVC/springMVC01.md)
-  - [文件上传、拦截器](_source/springMVC/springMVC02.md)
-  - [SSM](_source/springMVC/springMVC03.md)
+- [SSM](_source/SpringFrameWork/ssm目录.md)
 
 ### 中间件
 
@@ -74,10 +44,20 @@
 
   - [设计模式](_source/架构/设计模式.md)
 
+### 面试
+
+  - [秒杀系统的设计与实现](_source/架构/秒杀系统的设计与实现.md)
+  - [面试题汇总](_source/面试/面试题.md)
+  - [ThinkingSummary](_source/面试/面试Summary.md)
+  - [笔试题](_source/面试/笔试复盘.md)
+
 ### 秋招
 
-  - [秒杀系统的设计与实现[未完成]](_source/架构/秒杀系统的设计与实现.md)
-  - [面试题汇总](_source/面试题.md)
-  - [ThinkingSummary](_source/面试Summary.md)
   - [我的秋招之路--时间进度篇](_source/秋招/我的秋招之路--时间进度篇.md)
-  - [面经](_source/秋招/面经.md)
+  - [面经](_source/秋招/面试真题.md)
+  - [小公司面经](_source/秋招/小公司面试.md)
+
+### 解决的BUG
+
+- [Java遇到的bug](_source/解决的bug/git篇.md)
+- [Git遇到的bug](_source/解决的bug/Java篇.md)
