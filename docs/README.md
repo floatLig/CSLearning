@@ -35,6 +35,10 @@
 
 - [SSM](_source/SpringFrameWork/ssm目录.md)
 
+### Git
+
+- [Git](_source/Git/Git学习.md)
+
 ### 中间件
 
   - [Redis入门](_source/中间件/Redis.md)
@@ -43,6 +47,9 @@
 ### 微服务
 
 - [初识微服务](_source/微服务/初识微服务.md)
+- [谷粒商城—分布式基础](_source/微服务/谷粒商城-基础篇.md)
+- [Spring Boot 上篇](_source/微服务/SpringBoot笔记1.md)
+<!-- - [谷粒商城—分布式高级](_source/微服务/谷粒商城—分布式高级.md) -->
 
 ### 设计模式
 

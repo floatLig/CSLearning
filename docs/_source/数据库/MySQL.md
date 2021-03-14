@@ -140,11 +140,11 @@ redo log 和 bin log?
 
 MySQL利用 redo log 和 bin log 进行两段提交。事务提交的时候，redo log 先处于 prepare 状态，当 bin log 提交后， redo log 再进行 commit。
 
-<!-- ![-](../../_img/ee9af616e05e4b853eba27048351f62a.jpg) -->
+![-](../../_img/ee9af616e05e4b853eba27048351f62a.jpg)
 
-<div>
+<!-- <div>
     <img src="../../_img/ee9af616e05e4b853eba27048351f62a.jpg" height=700px>
-<div>
+<div> -->
 
 
 1. 如果说在 redo log 处于 prepare 之前崩溃的，那么数据会进行回滚，仍然能够保证一致性。
