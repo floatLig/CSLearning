@@ -1,4 +1,4 @@
-请使用网页版进行阅读： https://floatlig.gitee.io/javalearning/#/ 
+请使用网页版进行阅读： https://floatlig.gitee.io/CSlearning/#/ 
 （网页版的跳转规则跟Github的跳转规则有些不一样，优先适配网页版的跳转规则，Github的Readme一些跳转链接会出现错误，还未进行修复，见谅）
 
 
